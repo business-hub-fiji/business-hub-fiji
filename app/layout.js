@@ -1,4 +1,6 @@
 
+import { Analytics } from '@vercel/analytics/next';
+
 export const metadata = {
   title: "Business Hub Fiji",
   description:
@@ -14,6 +16,7 @@ export default function RootLayout({ children }) {
         background: "#f5f7fa"
       }}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
