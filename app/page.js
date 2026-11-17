@@ -65,7 +65,7 @@ export default function Home() {
         }}>
           <a href="#services" style={linkStyle}>Explore</a>
           <a href="#about" style={linkStyle}>About</a>
-          <a href="#join" style={linkStyle}>Join Us</a>
+          <a href="/register.html" style={linkStyle}>Join Us</a>
         </nav>
       </header>
 
@@ -107,7 +107,7 @@ export default function Home() {
           <a href="#services" style={primaryButton}>
             Explore Platform
           </a>
-          <a href="#join" style={secondaryButton}>
+          <a href="/register.html" style={secondaryButton}>
             Join Business Hub
           </a>
         </div>
@@ -180,9 +180,23 @@ export default function Home() {
         <h2>Become Part of the Network</h2>
         <p>Start building your digital business presence.</p>
         <p style={{color:"#64748b"}}>
-          Business registration and customer accounts
-          will be activated in our next development stage.
+          Registration is free. No sign-up or monthly fees for businesses,
+          just a small commission on sales.
         </p>
+        <div style={{
+          display:"flex",
+          gap:"14px",
+          justifyContent:"center",
+          flexWrap:"wrap",
+          marginTop:"24px"
+        }}>
+          <a href="/register.html#business" style={joinPrimary}>
+            Register my business
+          </a>
+          <a href="/register.html#customer" style={joinSecondary}>
+            Join as a customer
+          </a>
+        </div>
       </section>
 
       <footer style={{
@@ -219,4 +233,22 @@ const secondaryButton = {
   padding:"14px 23px",
   borderRadius:"7px",
   textDecoration:"none"
+};
+
+const joinPrimary = {
+  background:"#10213c",
+  color:"white",
+  padding:"14px 23px",
+  borderRadius:"7px",
+  textDecoration:"none",
+  fontWeight:"bold"
+};
+
+const joinSecondary = {
+  border:"1px solid #10213c",
+  color:"#10213c",
+  padding:"14px 23px",
+  borderRadius:"7px",
+  textDecoration:"none",
+  fontWeight:"bold"
 };
