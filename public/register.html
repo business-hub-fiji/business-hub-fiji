@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join Business Hub Fiji</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a single column on phones; a lagoon-blue hero, then a masi-pattern band separating each part, ending at the form. */
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --ink:#10242b;
+  --muted:#4d6268;
+  --line:#dde4ee;
+  --lagoon:#10213c;
+  --lagoon-ink:#ffffff;
+  --accent:#e8c879;
+  --accent-ink:#10213c;
+  --sand:#efe6d6;
+  --masi:#3b2a20;
+  --ok:#1f7a4a;
+  --err:#b3261e;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1719; --surface:#132226; --ink:#e7f0ef; --muted:#9fb3b5; --line:#24393d;
+    --lagoon:#1b3459; --lagoon-ink:#f2f6fb; --accent:#e8c879; --accent-ink:#10213c;
+    --sand:#1d2a2a; --masi:#c9a98a; --ok:#5cc58f; --err:#ff8a80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1719; --surface:#132226; --ink:#e7f0ef; --muted:#9fb3b5; --line:#24393d;
+  --lagoon:#1b3459; --lagoon-ink:#f2f6fb; --accent:#e8c879; --accent-ink:#10213c;
+  --sand:#1d2a2a; --masi:#c9a98a; --ok:#5cc58f; --err:#ff8a80; color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body)}
+a{color:var(--lagoon)}
+:root[data-theme="dark"] a{color:var(--accent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) a{color:var(--accent)}}
+h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,4.5vw,2.3rem);font-weight:800}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* header */
+header{background:var(--lagoon);color:var(--lagoon-ink)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap}
+.logo{display:flex;align-items:baseline;gap:8px;color:inherit;text-decoration:none}
+.logo b{font:800 1.25rem var(--display)}
+.logo span{font:700 .72rem var(--body);letter-spacing:.18em;padding:2px 6px;border:1.5px solid currentColor;border-radius:4px}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:inherit !important;text-decoration:none;font-weight:600;font-size:.95rem;opacity:.9}
+nav a:hover{opacity:1;text-decoration:underline}
+
+.hero{padding:44px 0 52px;display:grid;gap:22px}
+.hero h1{font-size:clamp(2.1rem,7vw,3.6rem);font-weight:800;max-width:15ch}
+.hero p{max-width:56ch;font-size:1.1rem;opacity:.92}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 1rem var(--body);padding:13px 22px;border-radius:999px;border:2px solid transparent;cursor:pointer;text-decoration:none}
+.btn-accent{background:var(--accent);color:var(--accent-ink) !important}
+.btn-ghost{background:transparent;color:inherit !important;border-color:currentColor}
+.btn-dark{background:var(--lagoon);color:var(--lagoon-ink) !important}
+.facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.chip{font-size:.85rem;font-weight:600;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.14)}
+
+/* masi band */
+.masi{height:18px;background:
+  linear-gradient(135deg,var(--masi) 25%,transparent 25%) -9px 0/18px 18px,
+  linear-gradient(225deg,var(--masi) 25%,transparent 25%) -9px 0/18px 18px,
+  var(--sand);opacity:.9}
+
+section{padding:52px 0}
+.lead{color:var(--muted);max-width:60ch;margin-top:10px}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:26px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:8px}
+.step::before{counter-increment:s;content:counter(s);font:800 1.6rem var(--display);color:var(--accent)}
+.step p{color:var(--muted)}
+
+.biz{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:24px}
+.terms{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.terms li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.terms li::before{content:"";width:22px;height:22px;border-radius:50%;margin-top:2px;background:var(--lagoon) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/14px no-repeat}
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cats span{border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-size:.92rem;background:var(--bg)}
+
+.spot{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:8px;align-content:start}
+.card.first{border-left:6px solid var(--accent)}
+.tag{justify-self:start;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:6px;background:var(--sand);color:var(--ink)}
+.card p{color:var(--muted)}
+
+/* form */
+.formbox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:24px;max-width:720px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:16px}
+legend{font:600 1.05rem var(--display);margin-bottom:6px;padding:0}
+.toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:5px}
+.toggle input{position:absolute;opacity:0;pointer-events:none}
+.toggle label{text-align:center;padding:11px 8px;border-radius:9px;font-weight:700;cursor:pointer;color:var(--muted)}
+.toggle input:checked + label{background:var(--lagoon);color:var(--lagoon-ink)}
+.toggle input:focus-visible + label{outline:3px solid var(--accent);outline-offset:2px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.field{display:grid;gap:6px}
+.field > label,.lbl{font-weight:600;font-size:.95rem}
+.req{color:var(--accent)}
+.hint{font-size:.85rem;color:var(--muted)}
+input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--lagoon) 25%,transparent)}
+.radios,.checks{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;font-size:.95rem;background:var(--bg)}
+.pill:has(input:checked){border-color:var(--lagoon);background:color-mix(in srgb,var(--lagoon) 12%,var(--bg))}
+.agree{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem}
+.agree input{width:18px;height:18px;margin-top:3px;accent-color:var(--lagoon)}
+.bizonly{display:grid;gap:16px;padding:18px;border-radius:12px;background:color-mix(in srgb,var(--sand) 60%,transparent);border:1px dashed var(--line)}
+.bizonly[hidden]{display:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.err{color:var(--err);font-size:.88rem;font-weight:600;min-height:0}
+.invalid{border-color:var(--err) !important}
+.submit{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+.done{display:grid;gap:14px}
+.done[hidden]{display:none}
+.ref{font:800 1.5rem var(--display);letter-spacing:.04em;color:var(--lagoon)}
+:root[data-theme="dark"] .ref{color:var(--accent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ref{color:var(--accent)}}
+.summary{white-space:pre-wrap;font:400 .9rem/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto}
+.note{font-size:.92rem;color:var(--muted)}
+.status{font-weight:600}
+
+.privacy{display:grid;gap:10px;max-width:68ch}
+.privacy ul{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--muted)}
+.contact{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.contact code{font:600 .95rem var(--body);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;word-break:break-all}
+
+footer{background:var(--lagoon);color:var(--lagoon-ink);padding:28px 0}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+footer a{color:inherit !important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="/" aria-label="Business Hub Fiji home"><b>Business Hub</b><span>FIJI</span></a>
+      <nav aria-label="Main">
+        <a href="/">Home</a>
+        <a href="#how">How it works</a>
+        <a href="#business">For businesses</a>
+        <a href="#register">Register</a>
+      </nav>
+    </div>
+    <div class="hero" id="top">
+      <h1>Fiji's online mall. Shop local, sell local.</h1>
+      <p>Business Hub Fiji puts local shops, services and customers in one place. Customers deal with businesses directly, and businesses keep taking payment their own way: M-PAiSA, QR or bank transfer.</p>
+      <div class="cta">
+        <a class="btn btn-accent" href="#register" data-role="business">Register my business</a>
+        <a class="btn btn-ghost" href="#register" data-role="customer">Join as a customer</a>
+      </div>
+      <div class="facts">
+        <span class="chip">No sign-up fee</span>
+        <span class="chip">No monthly fee</span>
+        <span class="chip">Small commission per sale</span>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="masi" aria-hidden="true"></div>
+
+<main>
+<section id="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="lead">Registering takes about two minutes. You're only telling us you're interested, so nothing is charged and no account is opened yet.</p>
+    <div class="steps">
+      <div class="step"><h3>Choose customer or business</h3><p>Customers find and buy from local shops. Businesses get their own shop in the mall.</p></div>
+      <div class="step"><h3>Leave your details</h3><p>Email, phone or WhatsApp, whichever suits you. You get a registration reference straight away.</p></div>
+      <div class="step"><h3>We contact you</h3><p>The Business Hub team checks your details and gets in touch to set up your access.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="business" class="biz">
+  <div class="wrap">
+    <h2>For businesses</h2>
+    <p class="lead">Your shop, your customers, your payments. The hub only earns when you make a sale.</p>
+    <div class="two">
+      <ul class="terms">
+        <li><span><strong>Commission only.</strong> No sign-up fee and no monthly subscription. A small commission is charged on sales made through the hub.</span></li>
+        <li><span><strong>You keep your payments.</strong> Customers pay you directly with M-PAiSA, QR or bank transfer.</span></li>
+        <li><span><strong>Monthly settlement.</strong> Commission is cleared at the end of each month to keep your shop live and taking orders.</span></li>
+        <li><span><strong>Your rates are confirmed first.</strong> We agree the commission with you before your shop opens.</span></li>
+      </ul>
+      <div>
+        <h3>Businesses we're welcoming</h3>
+        <div class="cats">
+          <span>Fish &amp; food</span><span>Supermarkets</span><span>Hardware</span><span>Carwash</span><span>Car rental</span><span>Land surveying</span><span>Land development &amp; civil works</span><span>Restaurants &amp; takeaway</span><span>Transport &amp; delivery</span><span>Other services</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="shops">
+  <div class="wrap">
+    <h2>Already in the mall</h2>
+    <div class="spot">
+      <div class="card first">
+        <span class="tag">First shop</span>
+        <h3>True Boundary Consultant</h3>
+        <p>Land surveying, based in Lautoka. The first business to open a shop in Business Hub Fiji.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Trial</span>
+        <h3>Kana Ika fish trial</h3>
+        <p>A trial of fresh fish sourced in Lautoka, ordered in the Suva area and delivered on Sunday mornings. We'll confirm when ordering is open.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="masi" aria-hidden="true"></div>
+
+<section id="register">
+  <div class="wrap">
+    <h2>Register your interest</h2>
+    <p class="lead">Fields marked <span class="req">*</span> are required. Please don't send passwords, bank details or government ID.</p>
+
+    <div class="formbox">
+      <form id="reg" novalidate>
+        <fieldset>
+          <legend>I'm joining as</legend>
+          <div class="toggle" role="radiogroup" aria-label="Joining as">
+            <input type="radio" name="role" id="role-customer" value="Customer" checked><label for="role-customer">Customer</label>
+            <input type="radio" name="role" id="role-business" value="Business"><label for="role-business">Business</label>
+          </div>
+
+          <div class="bizonly" id="bizonly" hidden>
+            <div class="grid2">
+              <div class="field">
+                <label for="bizname">Business name <span class="req">*</span></label>
+                <input type="text" id="bizname" name="bizname" autocomplete="organization">
+                <span class="err" id="bizname-err"></span>
+              </div>
+              <div class="field">
+                <label for="category">Category <span class="req">*</span></label>
+                <select id="category" name="category">
+                  <option value="">Choose one</option>
+                  <option>Fish &amp; food</option>
+                  <option>Supermarket &amp; grocery</option>
+                  <option>Hardware &amp; building</option>
+                  <option>Carwash</option>
+                  <option>Car rental</option>
+                  <option>Land surveying</option>
+                  <option>Land development &amp; civil works</option>
+                  <option>Restaurant &amp; takeaway</option>
+                  <option>Clothing &amp; retail</option>
+                  <option>Transport &amp; delivery</option>
+                  <option>Other services</option>
+                </select>
+                <span class="err" id="category-err"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="services">What do you sell or offer?</label>
+              <textarea id="services" name="services" placeholder="e.g. fresh reef fish, hardware supplies, survey plans"></textarea>
+            </div>
+            <div class="field">
+              <label for="maps">Google Maps link to your business</label>
+              <input type="url" id="maps" name="maps" placeholder="https://maps.app.goo.gl/…" inputmode="url">
+              <span class="hint">Optional. Helps customers find you.</span>
+            </div>
+            <div class="field">
+              <span class="lbl" id="pay-lbl">Payments you accept</span>
+              <div class="checks" role="group" aria-labelledby="pay-lbl">
+                <label class="pill"><input type="checkbox" name="pay" value="M-PAiSA"> M-PAiSA</label>
+                <label class="pill"><input type="checkbox" name="pay" value="QR"> QR</label>
+                <label class="pill"><input type="checkbox" name="pay" value="Bank transfer"> Bank transfer</label>
+                <label class="pill"><input type="checkbox" name="pay" value="Cash"> Cash</label>
+              </div>
+            </div>
+            <label class="agree" for="commission">
+              <input type="checkbox" id="commission" name="commission">
+              <span>I understand Business Hub Fiji charges a commission on sales, cleared at the end of each month, with no sign-up or monthly fee. <span class="req">*</span></span>
+            </label>
+            <span class="err" id="commission-err"></span>
+          </div>
+
+          <div class="field">
+            <label for="name">Your name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" autocomplete="name">
+            <span class="err" id="name-err"></span>
+          </div>
+
+          <div class="field">
+            <span class="lbl" id="via-lbl">Contact me by</span>
+            <div class="radios" role="radiogroup" aria-labelledby="via-lbl">
+              <label class="pill"><input type="radio" name="via" value="WhatsApp" checked> WhatsApp</label>
+              <label class="pill"><input type="radio" name="via" value="Phone call"> Phone call</label>
+              <label class="pill"><input type="radio" name="via" value="Email"> Email</label>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label for="phone">Phone / WhatsApp number <span class="req" id="phone-req">*</span></label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="e.g. 9xx xxxx" inputmode="tel">
+              <span class="err" id="phone-err"></span>
+            </div>
+            <div class="field">
+              <label for="email">Email <span class="req" id="email-req" hidden>*</span></label>
+              <input type="email" id="email" name="email" autocomplete="email" inputmode="email">
+              <span class="err" id="email-err"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="town">Town or area <span class="req">*</span></label>
+            <select id="town" name="town">
+              <option value="">Choose your town</option>
+              <optgroup label="Central">
+                <option>Suva</option><option>Nasinu</option><option>Nausori</option><option>Lami</option><option>Navua</option>
+              </optgroup>
+              <optgroup label="Western">
+                <option>Lautoka</option><option>Nadi</option><option>Ba</option><option>Tavua</option><option>Rakiraki</option><option>Sigatoka</option>
+              </optgroup>
+              <optgroup label="Northern">
+                <option>Labasa</option><option>Savusavu</option><option>Taveuni</option>
+              </optgroup>
+              <optgroup label="Eastern">
+                <option>Levuka</option><option>Other island</option>
+              </optgroup>
+              <option>Other</option>
+            </select>
+            <span class="err" id="town-err"></span>
+          </div>
+
+          <div class="field">
+            <label for="notes">Anything else we should know?</label>
+            <textarea id="notes" name="notes"></textarea>
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="website">Leave this empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <label class="agree" for="consent">
+            <input type="checkbox" id="consent" name="consent">
+            <span>I agree to Business Hub Fiji keeping these details and contacting me about joining. See the <a href="#privacy">privacy notice</a>. <span class="req">*</span></span>
+          </label>
+          <span class="err" id="consent-err"></span>
+
+          <div class="submit">
+            <button type="submit" class="btn btn-accent" id="go">Register</button>
+            <span class="note">Free. Nothing is charged.</span>
+          </div>
+          <span class="err" id="send-err" role="alert"></span>
+        </fieldset>
+      </form>
+
+      <div class="done" id="done" hidden aria-live="polite">
+        <h3 id="done-title">Almost done</h3>
+        <p>Your registration reference</p>
+        <div class="ref" id="ref"></div>
+        <p class="status" id="done-msg">Tap <strong>Send registration</strong> to email it to the Business Hub team. Keep your reference to change or remove your details later.</p>
+        <div class="cta" id="send-row">
+          <a class="btn btn-accent" id="mail" href="#" target="_top">Send registration</a>
+          <button type="button" class="btn btn-ghost" id="copy">Copy details</button>
+        </div>
+        <p class="note" id="mail-note">If your email app doesn't open, copy the details and send them to <strong>business-hub-fiji@risingsunfj.com</strong>.</p>
+        <div class="summary" id="summary"></div>
+        <button type="button" class="btn btn-ghost" id="again" style="justify-self:start">Start a new registration</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy" class="biz">
+  <div class="wrap privacy">
+    <h2>Privacy notice</h2>
+    <ul>
+      <li>We collect what you enter in this form: your name, contact details, town and, for businesses, your business details.</li>
+      <li>Only the Business Hub Fiji team sees them. They are never published or sold.</li>
+      <li>We use them only to contact you about joining the hub.</li>
+      <li>To change or remove your details, email us with your registration reference (it starts with BHF-).</li>
+      <li>Never send passwords, bank account numbers or government ID through this form.</li>
+    </ul>
+    <h3 style="margin-top:14px">Contact us</h3>
+    <div class="contact">
+      <code>business-hub-fiji@risingsunfj.com</code>
+      <a class="btn btn-dark" href="mailto:business-hub-fiji@risingsunfj.com" target="_top">Email us</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="/"><b>Business Hub</b><span>FIJI</span></a>
+    <span>Local roots. A connected future.</span>
+    <a href="#privacy">Privacy notice</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // SETTINGS
+  // Hosted by Google Apps Script (the normal launch): nothing to change, sign-ups go straight to your Google Sheet.
+  // Hosted on your own website instead: paste your Apps Script web app URL (ends in /exec) between the quotes.
+  var FORM_ENDPOINT = "";
+  var HUB_EMAIL = "business-hub-fiji@risingsunfj.com";
+
+  var GAS = (typeof google !== "undefined" && google.script && google.script.run) ? google.script.run : null;
+
+  // In-page links scroll smoothly and also work inside the Google Apps Script frame.
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute("href").slice(1);
+    var t = id ? document.getElementById(id) : null;
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({block:"start"});
+  });
+
+  var form = document.getElementById("reg");
+  var done = document.getElementById("done");
+  var bizonly = document.getElementById("bizonly");
+  var $ = function(id){ return document.getElementById(id); };
+
+  function role(){ return form.querySelector('input[name="role"]:checked').value; }
+  function via(){ return form.querySelector('input[name="via"]:checked').value; }
+
+  function syncRole(){ bizonly.hidden = role() !== "Business"; }
+  function syncVia(){
+    var v = via();
+    $("email-req").hidden = v !== "Email";
+    $("phone-req").hidden = v === "Email";
+  }
+  form.addEventListener("change", function(e){
+    if (e.target.name === "role") syncRole();
+    if (e.target.name === "via") syncVia();
+  });
+  document.querySelectorAll("[data-role]").forEach(function(a){
+    a.addEventListener("click", function(){
+      var r = a.getAttribute("data-role") === "business" ? "role-business" : "role-customer";
+      $(r).checked = true; syncRole();
+    });
+  });
+  syncRole(); syncVia();
+  if (location.hash === "#business" || location.hash === "#customer") {
+    $(location.hash === "#business" ? "role-business" : "role-customer").checked = true;
+    syncRole();
+    var reg = $("register");
+    var goReg = function(){ if (reg) reg.scrollIntoView({block:"start"}); };
+    if (document.readyState === "complete") goReg(); else window.addEventListener("load", goReg);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(goReg);
+  }
+
+  function setErr(id, msg){
+    var el = $(id), e = $(id + "-err");
+    if (e) e.textContent = msg || "";
+    if (el && el.classList) el.classList.toggle("invalid", !!msg);
+    return !msg;
+  }
+  function val(id){ return ($(id).value || "").trim(); }
+
+  function validate(){
+    var ok = true, isBiz = role() === "Business", v = via();
+    var phoneDigits = val("phone").replace(/\D/g, "");
+    var email = val("email");
+    ok = setErr("name", val("name") ? "" : "Please enter your name.") && ok;
+    if (v === "Email") {
+      ok = setErr("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? "" : "Please enter a valid email address.") && ok;
+      ok = setErr("phone", (!phoneDigits || phoneDigits.length >= 7) ? "" : "That number looks too short.") && ok;
+    } else {
+      ok = setErr("phone", phoneDigits.length >= 7 ? "" : "Please enter your phone or WhatsApp number.") && ok;
+      ok = setErr("email", (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ? "" : "Please check your email address.") && ok;
+    }
+    ok = setErr("town", val("town") ? "" : "Please choose your town.") && ok;
+    if (isBiz) {
+      ok = setErr("bizname", val("bizname") ? "" : "Please enter your business name.") && ok;
+      ok = setErr("category", val("category") ? "" : "Please choose a category.") && ok;
+      ok = setErr("commission", $("commission").checked ? "" : "Please confirm you understand the commission.") && ok;
+    } else {
+      setErr("bizname"); setErr("category"); setErr("commission");
+    }
+    ok = setErr("consent", $("consent").checked ? "" : "Please tick to agree before registering.") && ok;
+    return ok;
+  }
+
+  function makeRef(){
+    var d = new Date();
+    var ymd = String(d.getFullYear()).slice(2) + String(d.getMonth()+1).padStart(2,"0") + String(d.getDate()).padStart(2,"0");
+    var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", s = "";
+    var rnd = new Uint32Array(4);
+    try { crypto.getRandomValues(rnd); } catch(e){ for (var i=0;i<4;i++) rnd[i] = Math.floor(Math.random()*1e9); }
+    for (var j=0;j<4;j++) s += chars[rnd[j] % chars.length];
+    return "BHF-" + ymd + "-" + s;
+  }
+
+  function collect(ref){
+    var isBiz = role() === "Business";
+    var pays = Array.prototype.map.call(form.querySelectorAll('input[name="pay"]:checked'), function(x){ return x.value; });
+    var data = {
+      reference: ref,
+      joining_as: role(),
+      name: val("name"),
+      contact_by: via(),
+      phone: val("phone"),
+      email: val("email"),
+      town: val("town"),
+      notes: val("notes")
+    };
+    if (isBiz) {
+      data.business_name = val("bizname");
+      data.category = val("category");
+      data.offers = val("services");
+      data.google_maps = val("maps");
+      data.payments = pays.join(", ");
+      data.commission_understood = "Yes";
+    }
+    data.consent = "Yes";
+    data.submitted = new Date().toLocaleString("en-FJ");
+    return data;
+  }
+
+  var labels = {
+    reference:"Reference", joining_as:"Joining as", name:"Name", contact_by:"Contact by", phone:"Phone/WhatsApp",
+    email:"Email", town:"Town/area", business_name:"Business name", category:"Category", offers:"Offers",
+    google_maps:"Google Maps", payments:"Payments accepted", commission_understood:"Commission understood",
+    notes:"Notes", consent:"Consent given", submitted:"Submitted"
+  };
+  var order = ["reference","joining_as","name","contact_by","phone","email","town","business_name","category","offers","google_maps","payments","commission_understood","notes","consent","submitted"];
+
+  function toText(data){
+    return order.filter(function(k){ return data[k]; }).map(function(k){ return labels[k] + ": " + data[k]; }).join("\n");
+  }
+
+  var lastText = "";
+
+  function showDone(data, posted){
+    lastText = toText(data);
+    $("ref").textContent = data.reference;
+    $("summary").textContent = lastText;
+    var subject = "Registration " + data.reference + " (" + data.joining_as + (data.business_name ? ": " + data.business_name : "") + ")";
+    $("mail").href = "mailto:" + HUB_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(lastText);
+    if (posted) {
+      $("done-title").textContent = "Registration received";
+      $("done-msg").textContent = "Thanks! The Business Hub team will contact you soon. Keep your reference to change or remove your details later.";
+      $("send-row").hidden = true; $("mail-note").hidden = true;
+    } else {
+      $("done-title").textContent = "Almost done";
+      $("send-row").hidden = false; $("mail-note").hidden = false;
+    }
+    form.hidden = true; done.hidden = false;
+    done.scrollIntoView({block:"start"});
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (val("website")) return; // spam trap
+    if (!validate()) {
+      var first = form.querySelector(".invalid");
+      if (first) first.focus();
+      return;
+    }
+    var data = collect(makeRef());
+    $("send-err").textContent = "";
+    if (!GAS && !FORM_ENDPOINT) { showDone(data, false); return; }
+
+    var btn = $("go"); btn.disabled = true; btn.textContent = "Sending…";
+    function finish(res){
+      btn.disabled = false; btn.textContent = "Register";
+      if (res && res.ok) {
+        if (res.reference) data.reference = res.reference;
+        showDone(data, true);
+      } else if (res && res.error) {
+        $("send-err").textContent = res.error;
+      } else {
+        showDone(data, false); // could not reach the sheet: fall back to email
+      }
+    }
+    if (GAS) {
+      GAS.withSuccessHandler(finish).withFailureHandler(function(){ finish(null); }).submitRegistration(data);
+    } else {
+      fetch(FORM_ENDPOINT, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(data) })
+        .then(function(r){ return r.json(); })
+        .then(finish)
+        .catch(function(){ finish(null); });
+    }
+  });
+
+  $("copy").addEventListener("click", function(){
+    var b = this;
+    try {
+      navigator.clipboard.writeText(lastText).then(function(){ b.textContent = "Copied"; }, function(){ b.textContent = "Select the text below to copy"; });
+    } catch(err){ b.textContent = "Select the text below to copy"; }
+  });
+
+  $("again").addEventListener("click", function(){
+    form.reset(); syncRole(); syncVia();
+    $("copy").textContent = "Copy details";
+    done.hidden = true; form.hidden = false;
+    $("register").scrollIntoView({block:"start"});
+  });
+})();
+</script>
+</body>
+</html>
