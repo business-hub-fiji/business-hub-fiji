@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
           background: "#10213c",
           boxShadow: "0 -4px 16px rgba(0,0,0,.2)"
         }}>
-          <a href="/mall" style={{ ...btn, background: "#ffffff", color: "#10213c" }}>
+          <a href="/" style={{ ...btn, background: "#ffffff", color: "#10213c" }}>
             Browse
           </a>
           <a href="/join" style={{ ...btn, background: "#e8c879", color: "#10213c" }}>

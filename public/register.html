@@ -167,8 +167,8 @@ footer a{color:inherit !important}
     <div class="bar">
       <a class="logo" href="/" aria-label="Business Hub Fiji home"><b>Business Hub</b><span>FIJI</span></a>
       <nav aria-label="Main">
-        <a href="/">Home</a>
-        <a href="/mall">Mall</a>
+        <a href="/">Mall</a>
+        <a href="/about">About</a>
         <a href="#how">How it works</a>
         <a href="#business">For businesses</a>
         <a href="#register">Register</a>
@@ -592,7 +592,7 @@ footer a{color:inherit !important}
     if (posted) {
       // Saved: take them straight to the mall, with their reference shown there.
       try {
-        location.assign("/mall?welcome=" + encodeURIComponent(data.reference) + (data.joining_as === "Business" ? "&biz=1" : ""));
+        location.assign("/?welcome=" + encodeURIComponent(data.reference) + (data.joining_as === "Business" ? "&biz=1" : ""));
       } catch (e) {}
       $("done-title").textContent = "Registration received";
       $("done-msg").textContent = "Thanks! The Business Hub team will contact you soon. Keep your reference to change or remove your details later.";
@@ -655,7 +655,7 @@ footer a{color:inherit !important}
 })();
 </script>
 <nav class="qbar" aria-label="Quick access">
-  <a class="q-mall" href="/mall">Browse</a>
+  <a class="q-mall" href="/">Browse</a>
   <a class="q-reg" href="#register">Register</a>
   <a class="q-wa" href="https://wa.me/6799211153?text=Bula%20Business%20Hub%20Fiji%21%20I%27d%20like%20to%20join%20the%20mall." target="_blank" rel="noopener">WhatsApp us</a>
 </nav>
