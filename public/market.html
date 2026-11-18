@@ -67,6 +67,13 @@ header{background:var(--lagoon);color:var(--lagoon-ink)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .card h3{font-size:1.18rem;font-weight:800;overflow-wrap:anywhere}
+.card.has-photos{padding-top:0;overflow:hidden}
+.photos{position:relative;margin:0 -16px 2px}
+.strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:16px 16px 0 0}
+.strip::-webkit-scrollbar{display:none}
+.strip a{flex:0 0 100%;scroll-snap-align:start;display:block}
+.strip img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--chip)}
+.pcount{position:absolute;right:10px;bottom:10px;background:rgba(16,33,60,.82);color:#fff;font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:999px;pointer-events:none}
 .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.9rem;color:var(--muted)}
 .tag{background:var(--chip);color:var(--ink);font-weight:700;font-size:.78rem;padding:3px 9px;border-radius:999px}
 .offers{font-size:.98rem;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
@@ -192,6 +199,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   var HUB_WHATSAPP = "6799211153";
   var CATEGORIES = ["Fish & food","Supermarket & grocery","Hardware & building","Carwash","Car rental","Land surveying","Land development & civil works","Restaurant & takeaway","Clothing & retail","Transport & delivery","Other services"];
 
+  // Shop photos kept on this website (public folder). Key: business name, lower case, letters and numbers only.
+  var SHOP_PHOTOS = {
+    "petraenterprise": ["/petra-1.jpg", "/petra-2.jpg", "/petra-3.jpg", "/petra-4.jpg"]
+  };
+  function nameKey(n){ return String(n || "").toLowerCase().replace(/[^a-z0-9]/g, "").replace(/(pteltd|ltd|limited)$/, ""); }
+  function photosFor(l){
+    var list = Array.isArray(l.photos) ? l.photos : String(l.photos || "").split(/[\s,]+/);
+    list = list.filter(function(u){ return /^\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u) || /^https:\/\/business-hub-fiji\.vercel\.app\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u); });
+    if (!list.length) list = SHOP_PHOTOS[nameKey(l.name)] || [];
+    return list.slice(0, 6);
+  }
+
   var $ = function(id){ return document.getElementById(id); };
   var all = [], current = "All";
   var params = new URLSearchParams(location.search);
@@ -249,6 +268,28 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   function card(l){
     var c = el("article", "card");
+    var pics = photosFor(l);
+    if (pics.length) {
+      c.classList.add("has-photos");
+      var wrap = el("div", "photos"), strip = el("div", "strip");
+      strip.setAttribute("aria-label", "Photos of " + (l.name || "this shop"));
+      pics.forEach(function(src, i){
+        var a = el("a"); a.href = src; a.target = "_blank"; a.rel = "noopener";
+        var img = el("img"); img.src = src; img.loading = "lazy"; img.decoding = "async";
+        img.alt = (l.name || "Shop") + " photo " + (i + 1) + " of " + pics.length;
+        a.appendChild(img); strip.appendChild(a);
+      });
+      wrap.appendChild(strip);
+      if (pics.length > 1) {
+        var badge = el("span", "pcount", "1 / " + pics.length);
+        strip.addEventListener("scroll", function(){
+          var n = Math.round(strip.scrollLeft / Math.max(1, strip.clientWidth)) + 1;
+          badge.textContent = Math.min(n, pics.length) + " / " + pics.length;
+        }, { passive: true });
+        wrap.appendChild(badge);
+      }
+      c.appendChild(wrap);
+    }
     c.appendChild(el("h3", null, l.name || "Unnamed shop"));
     var meta = el("div", "meta");
     if (l.category) meta.appendChild(el("span", "tag", l.category));
