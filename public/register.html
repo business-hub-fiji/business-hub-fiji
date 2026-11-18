@@ -70,6 +70,16 @@ nav a:hover{opacity:1;text-decoration:underline}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 1rem var(--body);padding:13px 22px;border-radius:999px;border:2px solid transparent;cursor:pointer;text-decoration:none}
 .btn-accent{background:var(--accent);color:var(--accent-ink) !important}
 .btn-ghost{background:transparent;color:inherit !important;border-color:currentColor}
+.btn-wa{background:#1fa855;color:#fff !important}
+/* Quick-access bar fixed to the bottom of the page */
+body{padding-bottom:76px}
+[hidden]{display:none !important}
+.qbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#10213c;box-shadow:0 -4px 16px rgba(0,0,0,.2)}
+.qbar a,.qbar a:hover{opacity:1;flex:1;max-width:200px;text-align:center;padding:12px 8px;border-radius:999px;font:700 15px/1.2 var(--body);text-decoration:none !important}
+.qbar .q-mall{background:#ffffff;color:#10213c !important}
+.qbar .q-reg{background:#e8c879;color:#10213c !important}
+.qbar .q-wa{background:#1fa855;color:#fff !important}
+.qbar a:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .btn-dark{background:var(--lagoon);color:var(--lagoon-ink) !important}
 .facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 .chip{font-size:.85rem;font-weight:600;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.14)}
@@ -158,6 +168,7 @@ footer a{color:inherit !important}
       <a class="logo" href="/" aria-label="Business Hub Fiji home"><b>Business Hub</b><span>FIJI</span></a>
       <nav aria-label="Main">
         <a href="/">Home</a>
+        <a href="/mall">Mall</a>
         <a href="#how">How it works</a>
         <a href="#business">For businesses</a>
         <a href="#register">Register</a>
@@ -184,11 +195,11 @@ footer a{color:inherit !important}
 <section id="how">
   <div class="wrap">
     <h2>How it works</h2>
-    <p class="lead">Registering takes about two minutes. You're only telling us you're interested, so nothing is charged and no account is opened yet.</p>
+    <p class="lead">Registering takes about two minutes and costs nothing. Businesses go live in the mall straight away.</p>
     <div class="steps">
       <div class="step"><h3>Choose customer or business</h3><p>Customers find and buy from local shops. Businesses get their own shop in the mall.</p></div>
       <div class="step"><h3>Leave your details</h3><p>Email, phone or WhatsApp, whichever suits you. You get a registration reference straight away.</p></div>
-      <div class="step"><h3>We contact you</h3><p>The Business Hub team checks your details and gets in touch to set up your access.</p></div>
+      <div class="step"><h3>Step into the mall</h3><p>You go straight to the mall. Businesses appear there right away, and our team checks each registration number or TIN.</p></div>
     </div>
   </div>
 </section>
@@ -202,7 +213,7 @@ footer a{color:inherit !important}
         <li><span><strong>Commission only.</strong> No sign-up fee and no monthly subscription. A small commission is charged on sales made through the hub.</span></li>
         <li><span><strong>You keep your payments.</strong> Customers pay you directly with M-PAiSA, QR or bank transfer.</span></li>
         <li><span><strong>Monthly settlement.</strong> Commission is cleared at the end of each month to keep your shop live and taking orders.</span></li>
-        <li><span><strong>Your rates are confirmed first.</strong> We agree the commission with you before your shop opens.</span></li>
+        <li><span><strong>Genuine shops only.</strong> Every business gives a registration number or TIN, and we take down any listing that isn't genuine.</span></li>
       </ul>
       <div>
         <h3>Businesses we're welcoming</h3>
@@ -274,6 +285,12 @@ footer a{color:inherit !important}
               </div>
             </div>
             <div class="field">
+              <label for="regno">Business registration number or TIN <span class="req">*</span></label>
+              <input type="text" id="regno" name="regno" autocomplete="off" spellcheck="false" placeholder="e.g. BN 2024/123 or your TIN">
+              <span class="hint">Your Registrar of Companies number, or your FRCS TIN if you're not registered there. We check it to keep fake shops out. It's never shown publicly.</span>
+              <span class="err" id="regno-err"></span>
+            </div>
+            <div class="field">
               <label for="services">What do you sell or offer?</label>
               <textarea id="services" name="services" placeholder="e.g. fresh reef fish, hardware supplies, survey plans"></textarea>
             </div>
@@ -296,6 +313,11 @@ footer a{color:inherit !important}
               <span>I understand Business Hub Fiji charges a commission on sales, cleared at the end of each month, with no sign-up or monthly fee. <span class="req">*</span></span>
             </label>
             <span class="err" id="commission-err"></span>
+            <label class="agree" for="listing">
+              <input type="checkbox" id="listing" name="listing">
+              <span>Show my business in the mall straight away. Customers will see my business name, category, what I offer, town, payments accepted, Google Maps link and phone/WhatsApp number. <span class="req">*</span></span>
+            </label>
+            <span class="err" id="listing-err"></span>
           </div>
 
           <div class="field">
@@ -375,12 +397,13 @@ footer a{color:inherit !important}
         <h3 id="done-title">Almost done</h3>
         <p>Your registration reference</p>
         <div class="ref" id="ref"></div>
-        <p class="status" id="done-msg">Tap <strong>Send registration</strong> to email it to the Business Hub team. Keep your reference to change or remove your details later.</p>
+        <p class="status" id="done-msg">Tap <strong>Send on WhatsApp</strong> (or <strong>Send by email</strong>) to send it to the Business Hub team. Keep your reference to change or remove your details later.</p>
         <div class="cta" id="send-row">
-          <a class="btn btn-accent" id="mail" href="#" target="_top">Send registration</a>
+          <a class="btn btn-wa" id="wa" href="#" target="_top">Send on WhatsApp</a>
+          <a class="btn btn-accent" id="mail" href="#" target="_top">Send by email</a>
           <button type="button" class="btn btn-ghost" id="copy">Copy details</button>
         </div>
-        <p class="note" id="mail-note">If your email app doesn't open, copy the details and send them to <strong>business-hub-fiji@risingsunfj.com</strong>.</p>
+        <p class="note" id="mail-note">If neither app opens, copy the details and send them on WhatsApp to <strong>+679 921 1153</strong> or by email to <strong>business-hub-fiji@risingsunfj.com</strong>.</p>
         <div class="summary" id="summary"></div>
         <button type="button" class="btn btn-ghost" id="again" style="justify-self:start">Start a new registration</button>
       </div>
@@ -393,8 +416,10 @@ footer a{color:inherit !important}
     <h2>Privacy notice</h2>
     <ul>
       <li>We collect what you enter in this form: your name, contact details, town and, for businesses, your business details.</li>
-      <li>Only the Business Hub Fiji team sees them. They are never published or sold.</li>
-      <li>We use them only to contact you about joining the hub.</li>
+      <li>Customers: your details are seen only by the Business Hub Fiji team. They are never published or sold.</li>
+      <li>Businesses: if you tick "Show my business in the mall", your business name, category, what you offer, town, payments accepted, Google Maps link and phone/WhatsApp number appear publicly in the mall. Your own name, email and registration number or TIN are never shown.</li>
+      <li>We use your details to contact you about the hub and to check businesses are genuine. Nothing is ever sold.</li>
+      <li>To take your listing down at any time, message us on WhatsApp (+679 921 1153) or email us.</li>
       <li>To change or remove your details, email us with your registration reference (it starts with BHF-).</li>
       <li>Never send passwords, bank account numbers or government ID through this form.</li>
     </ul>
@@ -420,8 +445,9 @@ footer a{color:inherit !important}
   // SETTINGS
   // Hosted by Google Apps Script (the normal launch): nothing to change, sign-ups go straight to your Google Sheet.
   // Hosted on your own website instead: paste your Apps Script web app URL (ends in /exec) between the quotes.
-  var FORM_ENDPOINT = "";
+  var FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
   var HUB_EMAIL = "business-hub-fiji@risingsunfj.com";
+  var HUB_WHATSAPP = "6799211153"; // country code + number, digits only
 
   var GAS = (typeof google !== "undefined" && google.script && google.script.run) ? google.script.run : null;
 
@@ -494,9 +520,11 @@ footer a{color:inherit !important}
     if (isBiz) {
       ok = setErr("bizname", val("bizname") ? "" : "Please enter your business name.") && ok;
       ok = setErr("category", val("category") ? "" : "Please choose a category.") && ok;
+      ok = setErr("regno", val("regno").replace(/[^A-Za-z0-9]/g, "").length >= 4 ? "" : "Please enter your business registration number or TIN.") && ok;
       ok = setErr("commission", $("commission").checked ? "" : "Please confirm you understand the commission.") && ok;
+      ok = setErr("listing", $("listing").checked ? "" : "Please tick to show your business in the mall.") && ok;
     } else {
-      setErr("bizname"); setErr("category"); setErr("commission");
+      setErr("bizname"); setErr("category"); setErr("regno"); setErr("commission"); setErr("listing");
     }
     ok = setErr("consent", $("consent").checked ? "" : "Please tick to agree before registering.") && ok;
     return ok;
@@ -527,6 +555,8 @@ footer a{color:inherit !important}
     };
     if (isBiz) {
       data.business_name = val("bizname");
+      data.reg_no = val("regno");
+      data.listing_consent = $("listing").checked ? "Yes" : "No";
       data.category = val("category");
       data.offers = val("services");
       data.google_maps = val("maps");
@@ -540,11 +570,11 @@ footer a{color:inherit !important}
 
   var labels = {
     reference:"Reference", joining_as:"Joining as", name:"Name", contact_by:"Contact by", phone:"Phone/WhatsApp",
-    email:"Email", town:"Town/area", business_name:"Business name", category:"Category", offers:"Offers",
+    email:"Email", town:"Town/area", business_name:"Business name", reg_no:"Reg no./TIN", category:"Category", offers:"Offers",
     google_maps:"Google Maps", payments:"Payments accepted", commission_understood:"Commission understood",
     notes:"Notes", consent:"Consent given", submitted:"Submitted"
   };
-  var order = ["reference","joining_as","name","contact_by","phone","email","town","business_name","category","offers","google_maps","payments","commission_understood","notes","consent","submitted"];
+  var order = ["reference","joining_as","name","contact_by","phone","email","town","business_name","reg_no","category","offers","google_maps","payments","commission_understood","notes","consent","submitted"];
 
   function toText(data){
     return order.filter(function(k){ return data[k]; }).map(function(k){ return labels[k] + ": " + data[k]; }).join("\n");
@@ -557,8 +587,13 @@ footer a{color:inherit !important}
     $("ref").textContent = data.reference;
     $("summary").textContent = lastText;
     var subject = "Registration " + data.reference + " (" + data.joining_as + (data.business_name ? ": " + data.business_name : "") + ")";
+    $("wa").href = "https://wa.me/" + HUB_WHATSAPP + "?text=" + encodeURIComponent(subject + "\n\n" + lastText);
     $("mail").href = "mailto:" + HUB_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(lastText);
     if (posted) {
+      // Saved: take them straight to the mall, with their reference shown there.
+      try {
+        location.assign("/mall?welcome=" + encodeURIComponent(data.reference) + (data.joining_as === "Business" ? "&biz=1" : ""));
+      } catch (e) {}
       $("done-title").textContent = "Registration received";
       $("done-msg").textContent = "Thanks! The Business Hub team will contact you soon. Keep your reference to change or remove your details later.";
       $("send-row").hidden = true; $("mail-note").hidden = true;
@@ -619,5 +654,10 @@ footer a{color:inherit !important}
   });
 })();
 </script>
+<nav class="qbar" aria-label="Quick access">
+  <a class="q-mall" href="/mall">Browse</a>
+  <a class="q-reg" href="#register">Register</a>
+  <a class="q-wa" href="https://wa.me/6799211153?text=Bula%20Business%20Hub%20Fiji%21%20I%27d%20like%20to%20join%20the%20mall." target="_blank" rel="noopener">WhatsApp us</a>
+</nav>
 </body>
 </html>
