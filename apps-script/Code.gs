@@ -40,7 +40,7 @@ var REPORT_TYPES = ['Fake or misleading listing', 'No reply or poor service', 'P
 var REPORT_STATUSES = ['New', 'Looking into it', 'Resolved'];
 var BUTTONS = ['WhatsApp', 'Call', 'Map'];
 
-// Plans. Prices are FJD per month. Businesses pay by M-PAiSA, then you mark the payment Paid.
+// Plans. Prices are FJD per month. Businesses pay by the Fiji QR (BSP wallet), then you mark the payment Paid.
 var PLANS = {
   'Vinaka Featured': { price: 15, key: 'featured' },
   'Tabua Premium': { price: 40, key: 'premium' }
@@ -135,7 +135,7 @@ function setupExtras_(ss) {
   pay.getRange(2, 11, pn, 1).setNumberFormat('d mmm yyyy');
   pay.getRange(2, 9, pn, 1).setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(PAY_STATUSES, true).build());
-  pay.getRange(1, 9).setNote('Set to Paid once the M-PAiSA money has arrived (or Free trial approved). The shop\'s plan and badge update by themselves.');
+  pay.getRange(1, 9).setNote('Set to Paid once the QR payment has arrived (or Free trial approved). The shop\'s plan and badge update by themselves.');
   var prod = ss.getSheetByName(PRODUCTS_SHEET) || ss.insertSheet(PRODUCTS_SHEET);
   head(prod, PRODUCTS_HEAD);
   prod.getRange(2, 4, prod.getMaxRows() - 1, 1).setNumberFormat('0.00');
@@ -297,7 +297,7 @@ function report_(raw) {
   return { ok: true, reference: ref };
 }
 
-/** A business asks to upgrade. Logged in Payments; you confirm the M-PAiSA payment by hand. */
+/** A business asks to upgrade. Logged in Payments; you confirm the QR payment by hand. */
 function planRequest_(raw) {
   if (raw.website) return { ok: true, reference: 'P-0000' };
   var shopRef = cut_(raw.shop_ref, 20).toUpperCase(), plan = cut_(raw.plan, 60), contact = cut_(raw.contact, 120);
@@ -333,7 +333,7 @@ function planRequest_(raw) {
     MailApp.sendEmail(HUB_EMAIL, 'Plan request ' + ref + ': ' + business + ' - ' + (isTrial ? 'free trial' : plan),
       business + ' (' + shopRef + ') asked for ' + (isTrial ? TRIAL : plan + ' for ' + months + ' month(s)') +
       '.\nAmount: FJD ' + amount + '\nContact: ' + (contact || '-') +
-      '\n\nWhen the M-PAiSA payment arrives (or to approve the free month), open the Payments tab and set Status to ' +
+      '\n\nWhen the QR payment arrives in the BSP wallet (or to approve the free month), open the Payments tab and set Status to ' +
       (isTrial ? 'Free trial approved' : 'Paid') + '. The badge then appears in the mall by itself.', { name: SENDER_NAME });
   } catch (err) { console.error('Plan alert failed: ' + err); }
   return { ok: true, reference: ref, amount: amount, business: business, pay_to: PAY_TO, trial: isTrial };

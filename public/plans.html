@@ -79,6 +79,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .qbar .q-wa{background:#1fa855;color:#fff}
 footer{background:var(--lagoon);color:var(--lagoon-ink);padding:22px 0;font-size:.95rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.payqr{display:block;width:260px;max-width:100%;height:auto;border-radius:12px;background:#fff;padding:8px;border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -178,7 +179,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   </section>
 
   <section class="faq" aria-label="Questions">
-    <details><summary>How do I pay?</summary><p>By M-PAiSA to 921 1153, using the payment reference we give you. Then send us the receipt on WhatsApp. Your badge goes on once we see the payment, usually the same day.</p></details>
+    <details><summary>How do I pay?</summary><p>By Fiji QR. After you request your plan we show our payment QR code. Scan it with your banking or wallet app, pay the amount shown, and put the payment reference we give you in the note. Then send us the receipt on WhatsApp. Your plan goes on once we see the payment, usually the same day.</p></details>
     <details><summary>What happens if I stop paying?</summary><p>Your badge and top spot switch off when your paid time ends. Your shop stays in the mall on Bula Free.</p></details>
     <details><summary>Can I change plans?</summary><p>Yes. Request the new plan here and we'll switch it when the payment arrives.</p></details>
   </section>
@@ -209,7 +210,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     var plan = $("plan").value, trial = plan === TRIAL;
     $("months-wrap").hidden = trial;
     var m = Number($("months").value) || 1;
-    $("total").textContent = trial ? "Total: free for your first month" : "Total: FJD " + (PRICES[plan] * m) + " by M-PAiSA";
+    $("total").textContent = trial ? "Total: free for your first month" : "Total: FJD " + (PRICES[plan] * m) + ", paid by QR";
   }
   $("plan").addEventListener("change", update);
   $("months").addEventListener("change", update);
@@ -240,13 +241,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       .then(function(res){
         if (!res || !res.ok) throw new Error((res && res.error) || "x");
         var d = $("done"); d.textContent = "";
-        d.appendChild(line("h3", res.trial ? "Vinaka! Your free month is requested" : "Vinaka! One last step: pay by M-PAiSA"));
+        d.appendChild(line("h3", res.trial ? "Vinaka! Your free month is requested" : "Vinaka! One last step: pay by QR"));
         if (res.trial) {
           d.appendChild(line("p", "We'll switch on the Featured badge for " + res.business + " shortly. Your request reference is " + res.reference + "."));
         } else {
-          var p = line("p"); p.append("Send "); p.appendChild(line("b", "FJD " + res.amount)); p.append(" by M-PAiSA to "); p.appendChild(line("b", res.pay_to));
-          p.append(", and put "); p.appendChild(line("code", res.reference)); p.append(" as the reference.");
+          var p = line("p"); p.append("Scan this QR with your banking or wallet app and pay "); p.appendChild(line("b", "FJD " + res.amount));
+          p.append(". Put "); p.appendChild(line("code", res.reference)); p.append(" in the payment note or reference.");
           d.appendChild(p);
+          var qr = document.createElement("img"); qr.src = "/pay-qr.png"; qr.alt = "Business Hub Fiji payment QR code"; qr.className = "payqr"; qr.width = 260; qr.height = 260;
+          d.appendChild(qr);
+          var dl = line("a", "Save QR to my phone"); dl.className = "btn"; dl.href = "/pay-qr.png"; dl.setAttribute("download", "business-hub-fiji-pay-qr.png");
+          d.appendChild(dl);
+          d.appendChild(line("p", "Paying from this same phone? Save the QR, then in your app choose Scan QR and pick the photo from your gallery."));
           d.appendChild(line("p", "Then send us your receipt on WhatsApp. Your badge goes on once we see the payment."));
           var w = line("a", "Send my receipt on WhatsApp"); w.className = "btn btn-wa"; w.target = "_blank"; w.rel = "noopener";
           w.href = "https://wa.me/6799211153?text=" + encodeURIComponent("Bula Business Hub Fiji, I've paid FJD " + res.amount + " for " + res.business + ". Payment reference " + res.reference + ". Receipt attached.");
