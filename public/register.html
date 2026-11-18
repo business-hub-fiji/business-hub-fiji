@@ -269,17 +269,28 @@ footer a{color:inherit !important}
                 <label for="category">Category <span class="req">*</span></label>
                 <select id="category" name="category">
                   <option value="">Choose one</option>
-                  <option>Fish &amp; food</option>
-                  <option>Supermarket &amp; grocery</option>
-                  <option>Hardware &amp; building</option>
-                  <option>Carwash</option>
-                  <option>Car rental</option>
-                  <option>Land surveying</option>
-                  <option>Land development &amp; civil works</option>
-                  <option>Restaurant &amp; takeaway</option>
-                  <option>Clothing &amp; retail</option>
-                  <option>Transport &amp; delivery</option>
-                  <option>Other services</option>
+                  <optgroup label="Food &amp; Grocery">
+                    <option>Fish &amp; food</option>
+                    <option>Supermarket &amp; grocery</option>
+                    <option>Restaurant &amp; takeaway</option>
+                  </optgroup>
+                  <optgroup label="Building &amp; Land">
+                    <option>Hardware &amp; building</option>
+                    <option>Land development &amp; civil works</option>
+                    <option>Land surveying</option>
+                    <option>Land consultancy</option>
+                  </optgroup>
+                  <optgroup label="Vehicles &amp; Transport">
+                    <option>Car rental</option>
+                    <option>Carwash</option>
+                    <option>Transport &amp; delivery</option>
+                  </optgroup>
+                  <optgroup label="Shopping &amp; Retail">
+                    <option>Clothing &amp; retail</option>
+                  </optgroup>
+                  <optgroup label="Services">
+                    <option>Other services</option>
+                  </optgroup>
                 </select>
                 <span class="err" id="category-err"></span>
               </div>

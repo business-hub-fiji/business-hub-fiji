@@ -57,6 +57,9 @@ header{background:var(--lagoon);color:var(--lagoon-ink)}
 .cat[aria-pressed="true"]{background:var(--lagoon);color:var(--lagoon-ink)}
 .cat .n{font-size:.8rem;font-weight:700;opacity:.7;min-width:1.6em;text-align:right}
 .cat[data-empty="true"]:not([aria-pressed="true"]){color:var(--muted)}
+.cats li.grp{margin-top:6px}
+.cat.grp{font-weight:800}
+.cat.sub{padding-left:22px;font-weight:600;font-size:.92rem}
 
 .tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 .search{flex:1 1 260px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:0 16px}
@@ -82,6 +85,9 @@ header{background:var(--lagoon);color:var(--lagoon-ink)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 .95rem var(--body);padding:9px 14px;border-radius:999px;text-decoration:none;border:1.5px solid var(--line);color:var(--ink);background:transparent;cursor:pointer}
 .btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn-shop{background:var(--lagoon);border-color:var(--lagoon);color:var(--lagoon-ink)}
+.shoplink{text-decoration:none}
+.shoplink:hover{text-decoration:underline}
 .btn-accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .tier{font-size:.74rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.02em}
 .tier-f{background:#e8c879;color:#10213c}
@@ -128,6 +134,10 @@ footer .fl{background:none;border:0;color:inherit;font:inherit;text-decoration:u
   .cats li{flex:0 0 auto}
   .cat{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 13px;white-space:nowrap;font-size:.92rem}
   .cat .n{min-width:auto}
+  .cats li.grp{margin-top:0}
+  .cats li.sub{display:none}
+  .cats li.sub.open{display:block}
+  .cat.sub{padding-left:13px;background:var(--chip)}
   .tools{margin-top:12px}
 }
 
@@ -149,6 +159,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <nav class="topnav" aria-label="Main">
         <a href="/" aria-current="page">Mall</a>
         <a href="/plans">Plans</a>
+        <a href="/dashboard">My shop</a>
         <a href="/about">About</a>
         <a href="/join">Register</a>
       </nav>
@@ -259,7 +270,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   // Live listings come from the Business Hub Fiji Registrations sheet (Apps Script web app).
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
   var HUB_WHATSAPP = "6799211153";
-  var CATEGORIES = ["Fish & food","Supermarket & grocery","Hardware & building","Carwash","Car rental","Land surveying","Land development & civil works","Restaurant & takeaway","Clothing & retail","Transport & delivery","Other services"];
+  var GROUPS = [
+    { name: "Food & Grocery", cats: ["Fish & food", "Supermarket & grocery", "Restaurant & takeaway"] },
+    { name: "Building & Land", cats: ["Hardware & building", "Land development & civil works", "Land surveying", "Land consultancy"] },
+    { name: "Vehicles & Transport", cats: ["Car rental", "Carwash", "Transport & delivery"] },
+    { name: "Shopping & Retail", cats: ["Clothing & retail"] },
+    { name: "Services", cats: ["Other services"] }
+  ];
+  var CATEGORIES = [];
+  GROUPS.forEach(function(g){ CATEGORIES = CATEGORIES.concat(g.cats); });
+  function groupOf(cat){ for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i].cats.indexOf(cat) >= 0) return GROUPS[i].name; return "Services"; }
+  function matchesCurrent(l){
+    if (current === "All") return true;
+    if (current.indexOf("g:") === 0) return groupOf(l.category) === current.slice(2);
+    return l.category === current;
+  }
 
   // Shop photos kept on this website (public folder). Key: business name, lower case, letters and numbers only.
   var SHOP_PHOTOS = {
@@ -268,7 +293,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   function nameKey(n){ return String(n || "").toLowerCase().replace(/[^a-z0-9]/g, "").replace(/(pteltd|ltd|limited)$/, ""); }
   function photosFor(l){
     var list = Array.isArray(l.photos) ? l.photos : String(l.photos || "").split(/[\s,]+/);
-    list = list.filter(function(u){ return /^\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u) || /^https:\/\/business-hub-fiji\.vercel\.app\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u); });
+    list = list.filter(function(u){ return /^\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u) || /^https:\/\/business-hub-fiji\.vercel\.app\/[\w\-\/]+\.(jpe?g|png|webp)$/i.test(u) || /^https:\/\/lh3\.googleusercontent\.com\/d\/[\w-]{20,}$/.test(u); });
     if (!list.length) list = SHOP_PHOTOS[nameKey(l.name)] || [];
     return list.slice(0, 6);
   }
@@ -276,7 +301,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   var $ = function(id){ return document.getElementById(id); };
   var all = [], current = "All";
   var params = new URLSearchParams(location.search);
-  if (params.get("cat") && CATEGORIES.indexOf(params.get("cat")) >= 0) current = params.get("cat");
+  if (params.get("cat")) {
+    var pc = params.get("cat");
+    if (CATEGORIES.indexOf(pc) >= 0 || (pc.indexOf("g:") === 0 && GROUPS.some(function(g){ return "g:" + g.name === pc; }))) current = pc;
+  }
 
   // Welcome banner after registering
   var ref = params.get("welcome");
@@ -284,6 +312,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     $("welcome-ref").textContent = ref;
     if (params.get("biz") === "1") {
       $("welcome-title").textContent = "Bula, your shop is live in the mall!";
+      $("welcome-text").textContent = "Your reference is " + ref + ". Keep it safe. Use it to log in to your shop dashboard, add photos and products, and get your free shop website. ";
+      var dl = el("a", null, "Open my dashboard"); dl.href = "/dashboard?ref=" + encodeURIComponent(ref); dl.style.fontWeight = "700";
+      $("welcome-text").appendChild(dl);
     }
     $("welcome").hidden = false;
     $("welcome-close").addEventListener("click", function(){ $("welcome").hidden = true; });
@@ -352,27 +383,40 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   function renderCats(){
     var counts = { All: all.length };
-    all.forEach(function(l){ counts[l.category] = (counts[l.category] || 0) + 1; });
-    var list = ["All"].concat(CATEGORIES);
-    all.forEach(function(l){ if (l.category && list.indexOf(l.category) < 0) list.push(l.category); });
+    all.forEach(function(l){
+      counts[l.category] = (counts[l.category] || 0) + 1;
+      var g = "g:" + groupOf(l.category); counts[g] = (counts[g] || 0) + 1;
+    });
+    // Anything not in the list goes under Services
+    var extra = [];
+    all.forEach(function(l){ if (l.category && CATEGORIES.indexOf(l.category) < 0 && extra.indexOf(l.category) < 0) extra.push(l.category); });
     var ul = $("cats"); ul.textContent = "";
-    list.forEach(function(c){
-      var li = el("li");
-      var b = el("button", "cat");
+    function item(key, label, cls){
+      var li = el("li", cls);
+      var b = el("button", "cat " + (cls || ""));
       b.type = "button";
-      b.setAttribute("aria-pressed", String(c === current));
-      b.dataset.empty = String(!counts[c]);
-      b.appendChild(el("span", null, c === "All" ? "All shops" : c));
-      b.appendChild(el("span", "n", String(counts[c] || 0)));
+      b.setAttribute("aria-pressed", String(key === current));
+      b.dataset.empty = String(!counts[key]);
+      b.appendChild(el("span", null, label));
+      b.appendChild(el("span", "n", String(counts[key] || 0)));
       b.addEventListener("click", function(){
-        current = c;
+        current = key;
         var u = new URL(location.href);
-        if (c === "All") u.searchParams.delete("cat"); else u.searchParams.set("cat", c);
+        if (key === "All") u.searchParams.delete("cat"); else u.searchParams.set("cat", key);
         history.replaceState(null, "", u);
         renderCats(); renderList();
-        b.scrollIntoView({block:"nearest", inline:"center"});
+        var again = document.querySelector('.cat[aria-pressed="true"]');
+        if (again) again.scrollIntoView({ block: "nearest", inline: "center" });
       });
       li.appendChild(b); ul.appendChild(li);
+    }
+    item("All", "All shops", "");
+    var curGroup = current.indexOf("g:") === 0 ? current.slice(2) : (current !== "All" ? groupOf(current) : "");
+    GROUPS.forEach(function(g){
+      item("g:" + g.name, g.name, "grp");
+      var cats = g.cats.concat(g.name === "Services" ? extra : []);
+      if (cats.length < 2) return;
+      cats.forEach(function(c){ item(c, c, "sub" + (curGroup === g.name ? " open" : "")); });
     });
   }
 
@@ -400,7 +444,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       }
       c.appendChild(wrap);
     }
-    c.appendChild(el("h3", null, l.name || "Unnamed shop"));
+    var h3 = el("h3");
+    if (l.slug && /^[a-z0-9-]+$/.test(l.slug)) {
+      var nl = el("a", "shoplink", l.name || "Unnamed shop"); nl.href = "/shop/" + l.slug; h3.appendChild(nl);
+    } else h3.textContent = l.name || "Unnamed shop";
+    c.appendChild(h3);
     if (l.tier === "premium") { c.classList.add("is-premium"); c.id = "shop-" + nameKey(l.name); }
     else if (l.tier === "featured") c.classList.add("is-featured");
     var meta = el("div", "meta");
@@ -437,6 +485,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       m.addEventListener("click", function(){ track(l.name, "Map"); });
       a.appendChild(m);
     }
+    if (l.slug && /^[a-z0-9-]+$/.test(l.slug)) {
+      var v = el("a", "btn btn-shop", "Visit shop"); v.href = "/shop/" + l.slug; a.appendChild(v);
+    }
     c.appendChild(a);
     var r = el("button", "report", "Report this listing");
     r.type = "button";
@@ -448,7 +499,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   function renderList(){
     var q = $("q").value.trim().toLowerCase();
     var shown = all.filter(function(l){
-      if (current !== "All" && l.category !== current) return false;
+      if (!matchesCurrent(l)) return false;
       if (!q) return true;
       return [l.name, l.category, l.offers, l.town, l.payments].join(" ").toLowerCase().indexOf(q) >= 0;
     });
@@ -477,7 +528,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
         state.appendChild(el("p", null, "Shops appear here as soon as they register. Be one of the first."));
       } else {
         state.appendChild(el("h3", null, "No shops match yet"));
-        state.appendChild(el("p", null, q ? "Try a different word, or look in All shops." : "No shops in " + current + " yet. Know one? Tell them to join."));
+        state.appendChild(el("p", null, q ? "Try a different word, or look in All shops." : "No shops in " + current.replace(/^g:/, "") + " yet. Know one? Tell them to join."));
         var reset = el("button", "btn", "Show all shops");
         reset.type = "button";
         reset.addEventListener("click", function(){ $("q").value = ""; current = "All"; history.replaceState(null, "", location.pathname + (ref ? "?welcome=" + ref : "")); renderCats(); renderList(); });
@@ -518,6 +569,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   }
 
   $("q").addEventListener("input", renderList);
+  if (params.get("q")) $("q").value = params.get("q").slice(0, 80);
+  if (params.get("report")) setTimeout(function(){ openReport(params.get("report").slice(0, 120)); }, 0);
   renderCats();
   load();
 })();
