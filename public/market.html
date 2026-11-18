@@ -83,7 +83,21 @@ header{background:var(--lagoon);color:var(--lagoon-ink)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 .95rem var(--body);padding:9px 14px;border-radius:999px;text-decoration:none;border:1.5px solid var(--line);color:var(--ink);background:transparent;cursor:pointer}
 .btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
 .btn-accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.report{font-size:.8rem;color:var(--muted);align-self:flex-start}
+.report{font-size:.8rem;color:var(--muted);align-self:flex-start;background:none;border:0;padding:0;font-family:inherit;text-decoration:underline;cursor:pointer}
+dialog.rep{border:0;border-radius:18px;padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100vh - 24px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.rep::backdrop{background:rgba(10,20,35,.55)}
+.rep form,.rep .done{padding:20px;display:grid;gap:12px}
+.rep h2{font-size:1.35rem}
+.rep .sub{color:var(--muted);font-size:.95rem}
+.rep label{font-weight:700;font-size:.92rem;display:grid;gap:5px}
+.rep input,.rep select,.rep textarea{font:400 1rem var(--body);color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.rep textarea{min-height:96px;resize:vertical}
+.rep .opt{font-weight:400;color:var(--muted)}
+.rep .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:4px}
+.rep .err{color:#b42318;font-size:.9rem;min-height:1.2em}
+.rep .hp{position:absolute;left:-9999px}
+.rep .note{font-size:.82rem;color:var(--muted)}
+footer .fl{background:none;border:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer;padding:0}
 
 .state{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:28px 20px;text-align:center;display:grid;gap:12px;justify-items:center}
 .state h3{font-size:1.25rem}
@@ -181,9 +195,47 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 <footer>
   <div class="wrap">
     <span>Business Hub Fiji · Local roots. A connected future.</span>
-    <a href="mailto:business-hub-fiji@risingsunfj.com">business-hub-fiji@risingsunfj.com</a>
+    <span><button type="button" class="fl" id="report-general">Report a problem</button> · <a href="mailto:business-hub-fiji@risingsunfj.com">business-hub-fiji@risingsunfj.com</a></span>
   </div>
 </footer>
+
+<dialog class="rep" id="rep" aria-labelledby="rep-title">
+  <form id="rep-form" novalidate>
+    <h2 id="rep-title">Report a problem</h2>
+    <p class="sub" id="rep-about"></p>
+    <label>What's the problem?
+      <select id="rep-problem" required>
+        <option value="">Choose one…</option>
+        <option>Fake or misleading listing</option>
+        <option>No reply or poor service</option>
+        <option>Payment problem</option>
+        <option>Rude or offensive</option>
+        <option>Other</option>
+      </select>
+    </label>
+    <label>What happened?
+      <textarea id="rep-details" maxlength="1500" required placeholder="Tell us what happened, and when."></textarea>
+    </label>
+    <label>Your name <span class="opt">(optional)</span>
+      <input id="rep-name" maxlength="80" autocomplete="name">
+    </label>
+    <label>Phone, WhatsApp or email <span class="opt">(optional, so we can follow up)</span>
+      <input id="rep-contact" maxlength="120" autocomplete="tel">
+    </label>
+    <input class="hp" id="rep-website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="note">Only the Business Hub Fiji team sees reports. We don't share your details with the business.</p>
+    <p class="err" id="rep-err" role="alert"></p>
+    <div class="row">
+      <button type="button" class="btn" id="rep-cancel">Cancel</button>
+      <button type="submit" class="btn btn-accent" id="rep-send">Send report</button>
+    </div>
+  </form>
+  <div class="done" id="rep-done" hidden>
+    <h2>Vinaka, report received</h2>
+    <p class="sub">Your reference is <strong id="rep-ref"></strong>. Our team will look into it.</p>
+    <div class="row"><button type="button" class="btn btn-accent" id="rep-close">Close</button></div>
+  </div>
+</dialog>
 
 <nav class="qbar" aria-label="Quick access">
   <a class="q-mall" href="/" aria-current="page">Browse</a>
@@ -226,6 +278,54 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     $("welcome").hidden = false;
     $("welcome-close").addEventListener("click", function(){ $("welcome").hidden = true; });
   }
+
+  // Count taps on a shop's buttons (no personal details are sent).
+  function track(business, button){
+    try {
+      var body = JSON.stringify({ action: "click", business: business, button: button });
+      if (navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, new Blob([body], { type: "text/plain" }))) return;
+      fetch(ENDPOINT, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain" }, body: body });
+    } catch (e) {}
+  }
+
+  // Report a problem
+  var repShop = "";
+  function openReport(shop){
+    repShop = shop || "";
+    $("rep-about").textContent = shop ? "About: " + shop : "Tell us about a problem with a shop or with Business Hub Fiji.";
+    $("rep-form").reset(); $("rep-err").textContent = "";
+    $("rep-form").hidden = false; $("rep-done").hidden = true; $("rep-send").disabled = false;
+    var d = $("rep");
+    if (d.showModal) d.showModal(); else d.setAttribute("open", "");
+    setTimeout(function(){ $("rep-problem").focus(); }, 30);
+  }
+  function closeReport(){ var d = $("rep"); if (d.close) d.close(); else d.removeAttribute("open"); }
+  $("rep-cancel").addEventListener("click", closeReport);
+  $("rep-close").addEventListener("click", closeReport);
+  $("report-general").addEventListener("click", function(){ openReport(""); });
+  $("rep-form").addEventListener("input", function(){ $("rep-err").textContent = ""; });
+  $("rep-form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var problem = $("rep-problem").value, details = $("rep-details").value.trim();
+    if (!problem) { $("rep-err").textContent = "Please choose what the problem is."; $("rep-problem").focus(); return; }
+    if (details.length < 5) { $("rep-err").textContent = "Please tell us a little about what happened."; $("rep-details").focus(); return; }
+    $("rep-err").textContent = ""; $("rep-send").disabled = true; $("rep-send").textContent = "Sending…";
+    fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({
+      action: "report", business: repShop, problem: problem, details: details,
+      name: $("rep-name").value.trim(), contact: $("rep-contact").value.trim(), website: $("rep-website").value
+    }) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok) throw new Error((res && res.error) || "x");
+        $("rep-ref").textContent = res.reference;
+        $("rep-form").hidden = true; $("rep-done").hidden = false; $("rep-close").focus();
+      })
+      .catch(function(e){
+        $("rep-err").textContent = (e && e.message && e.message !== "x" && e.message.indexOf("fetch") < 0) ? e.message
+          : "Couldn't send. Check your connection, or WhatsApp us on +679 921 1153.";
+      })
+      .then(function(){ $("rep-send").disabled = false; $("rep-send").textContent = "Send report"; });
+  });
 
   function el(tag, cls, text){
     var e = document.createElement(tag);
@@ -308,22 +408,25 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       w.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent("Bula " + l.name + ", I found you on Business Hub Fiji.");
       w.target = "_blank"; w.rel = "noopener";
       w.setAttribute("aria-label", "WhatsApp " + l.name);
+      w.addEventListener("click", function(){ track(l.name, "WhatsApp"); });
       a.appendChild(w);
       var call = el("a", "btn", "Call");
       call.href = "tel:+" + wa;
       call.setAttribute("aria-label", "Call " + l.name);
+      call.addEventListener("click", function(){ track(l.name, "Call"); });
       a.appendChild(call);
     }
     if (l.maps && /^https:\/\//.test(l.maps)) {
       var m = el("a", "btn", "Map");
       m.href = l.maps; m.target = "_blank"; m.rel = "noopener nofollow";
       m.setAttribute("aria-label", "Map for " + l.name);
+      m.addEventListener("click", function(){ track(l.name, "Map"); });
       a.appendChild(m);
     }
     c.appendChild(a);
-    var r = el("a", "report", "Report this listing");
-    r.href = "https://wa.me/" + HUB_WHATSAPP + "?text=" + encodeURIComponent("Bula Business Hub Fiji, I'd like to report this listing: " + l.name + (l.town ? " (" + l.town + ")" : ""));
-    r.target = "_blank"; r.rel = "noopener";
+    var r = el("button", "report", "Report this listing");
+    r.type = "button";
+    r.addEventListener("click", function(){ openReport(l.name); });
     c.appendChild(r);
     return c;
   }
