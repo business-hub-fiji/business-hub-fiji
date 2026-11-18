@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plans · Business Hub Fiji</title>
+<meta name="description" content="List your shop in Fiji's online mall for free, or get featured from $15 a month.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: category menu down the left on wide screens, a sticky row of category chips on phones; listings fill the rest. */
+:root{
+  --bg:#f5f7fb; --surface:#ffffff; --ink:#10242b; --muted:#4d6268; --line:#dde4ee;
+  --lagoon:#10213c; --lagoon-ink:#ffffff; --accent:#e8c879; --accent-ink:#10213c;
+  --wa:#1fa855; --chip:#eef2f8;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0c1719;--surface:#132226;--ink:#e7f0ef;--muted:#9fb3b5;--line:#24393d;--lagoon:#1b3459;--lagoon-ink:#f2f6fb;--chip:#1a2c30;color-scheme:dark}
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--body);padding-bottom:76px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+header{background:var(--lagoon);color:var(--lagoon-ink)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;flex-wrap:wrap}
+.logo{display:flex;align-items:baseline;gap:8px;text-decoration:none}
+.logo b{font:800 1.25rem var(--display)}
+.logo span{font:700 .72rem var(--body);letter-spacing:.18em;padding:2px 6px;border:1.5px solid currentColor;border-radius:4px}
+.topnav{display:flex;gap:18px}
+.topnav a{text-decoration:none;font-weight:600;font-size:.95rem;opacity:.9}
+.topnav a:hover,.topnav a[aria-current]{opacity:1;text-decoration:underline}
+.intro{padding:18px 0 30px;display:grid;gap:8px}
+.intro h1{font-size:clamp(1.8rem,5.5vw,2.8rem);font-weight:800}
+.intro p{opacity:.9;max-width:60ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 .98rem var(--body);padding:11px 18px;border-radius:999px;text-decoration:none;border:1.5px solid var(--line);color:var(--ink);background:transparent;cursor:pointer}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:26px 0}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.plan.feat{border:2px solid #e8c879}
+.plan.prem{border:2px solid #e8c879;background:linear-gradient(180deg,rgba(232,200,121,.16),var(--surface) 45%)}
+.plan h2{font-size:1.35rem}
+.price{font:800 2rem var(--display)}
+.price small{font:600 .95rem var(--body);color:var(--muted)}
+.plan ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.tag{align-self:flex-start;font-size:.76rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#e8c879;color:#10213c}
+.tag.dark{background:#10213c;color:#e8c879}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin:10px 0 26px;display:grid;gap:14px;max-width:640px}
+.box h2{font-size:1.5rem}
+label{font-weight:700;font-size:.95rem;display:grid;gap:6px}
+input,select{font:400 1rem var(--body);color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+.hint{font-weight:400;color:var(--muted);font-size:.88rem}
+.total{font-weight:700}
+.err{color:#b42318;min-height:1.2em}
+.hp{position:absolute;left:-9999px}
+.ok{background:#e6f5ec;color:#123d26;border:1px solid #b9e2c8;border-radius:14px;padding:16px;display:grid;gap:10px}
+@media (prefers-color-scheme: dark){.ok{background:#123224;color:#d7f3e2;border-color:#24563c}}
+.ok code{font:700 1.05rem ui-monospace,monospace}
+.faq{display:grid;gap:10px;margin-bottom:34px;max-width:760px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.faq summary{font-weight:700;cursor:pointer}
+.faq p{margin-top:8px;color:var(--muted)}
+footer{background:var(--lagoon);color:var(--lagoon-ink);padding:22px 0;font-size:.95rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+/* Quick-access bar fixed to the bottom of the page */
+.qbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#10213c;box-shadow:0 -4px 16px rgba(0,0,0,.2)}
+.qbar a{flex:1;max-width:200px;text-align:center;padding:12px 8px;border-radius:999px;font:700 15px/1.2 var(--body);text-decoration:none}
+.qbar .q-mall{background:#ffffff;color:#10213c}
+.qbar .q-reg{background:#e8c879;color:#10213c}
+.qbar .q-wa{background:#1fa855;color:#fff}
+footer{background:var(--lagoon);color:var(--lagoon-ink);padding:22px 0;font-size:.95rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="/" aria-label="Business Hub Fiji home"><b>Business Hub</b><span>FIJI</span></a>
+      <nav class="topnav" aria-label="Main">
+        <a href="/">Mall</a>
+        <a href="/plans" aria-current="page">Plans</a>
+        <a href="/join">Register</a>
+      </nav>
+    </div>
+    <div class="intro">
+      <h1>Plans for your shop</h1>
+      <p>Every shop lists free. Upgrade when you want more customers to find you first.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="plans" aria-label="Plans">
+    <article class="plan">
+      <span class="tag" style="background:var(--chip);color:var(--ink)">Bula Free</span>
+      <div class="price">$0 <small>forever</small></div>
+      <ul>
+        <li>Your shop card in the mall</li>
+        <li>WhatsApp, Call and Map buttons for customers</li>
+        <li>Photos of your shop</li>
+      </ul>
+      <a class="btn" href="/join#business">List my business</a>
+    </article>
+    <article class="plan feat">
+      <span class="tag">★ Vinaka Featured</span>
+      <div class="price">$15 <small>FJD a month</small></div>
+      <ul>
+        <li>Everything in Bula Free</li>
+        <li>Gold <b>Featured</b> badge on your card</li>
+        <li>Shown at the top of your category</li>
+        <li><b>First month free</b> for new shops</li>
+      </ul>
+      <button class="btn btn-accent" type="button" data-pick="Vinaka Featured - free first month">Try a free month</button>
+    </article>
+    <article class="plan prem">
+      <span class="tag dark">★ Tabua Premium</span>
+      <div class="price">$40 <small>FJD a month</small></div>
+      <ul>
+        <li>Everything in Vinaka Featured</li>
+        <li>Your shop in the <b>Spotlight</b> at the top of the mall</li>
+        <li>Shown first, above all other shops</li>
+        <li>A monthly report of how many customers tapped WhatsApp, Call and Map</li>
+      </ul>
+      <button class="btn btn-accent" type="button" data-pick="Tabua Premium">Get Premium</button>
+    </article>
+  </section>
+
+  <section class="box" id="upgrade" aria-labelledby="up-title">
+    <h2 id="up-title">Upgrade my shop</h2>
+    <form id="up" novalidate>
+      <div style="display:grid;gap:14px">
+        <label>Your shop reference
+          <input id="ref" placeholder="BHF-261118-AB12" autocomplete="off" spellcheck="false" maxlength="20">
+          <span class="hint">It's in your welcome email, and it was shown when you registered. Lost it? WhatsApp us on +679 921 1153.</span>
+        </label>
+        <label>Plan
+          <select id="plan">
+            <option value="Vinaka Featured - free first month">Vinaka Featured – first month free</option>
+            <option value="Vinaka Featured">Vinaka Featured – $15 a month</option>
+            <option value="Tabua Premium">Tabua Premium – $40 a month</option>
+          </select>
+        </label>
+        <label id="months-wrap">How many months?
+          <select id="months">
+            <option value="1">1 month</option>
+            <option value="3">3 months</option>
+            <option value="6">6 months</option>
+            <option value="12">12 months</option>
+          </select>
+        </label>
+        <label>Your phone or WhatsApp <span class="hint">(so we can confirm)</span>
+          <input id="contact" maxlength="120" autocomplete="tel" inputmode="tel">
+        </label>
+        <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="total" id="total"></p>
+        <p class="err" id="err" role="alert"></p>
+        <div><button class="btn btn-accent" type="submit" id="send">Request upgrade</button></div>
+      </div>
+    </form>
+    <div class="ok" id="done" hidden></div>
+  </section>
+
+  <section class="faq" aria-label="Questions">
+    <details><summary>How do I pay?</summary><p>By M-PAiSA to 921 1153, using the payment reference we give you. Then send us the receipt on WhatsApp. Your badge goes on once we see the payment, usually the same day.</p></details>
+    <details><summary>What happens if I stop paying?</summary><p>Your badge and top spot switch off when your paid time ends. Your shop stays in the mall on Bula Free.</p></details>
+    <details><summary>Can I change plans?</summary><p>Yes. Request the new plan here and we'll switch it when the payment arrives.</p></details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Business Hub Fiji · Local roots. A connected future.</span>
+    <a href="mailto:business-hub-fiji@risingsunfj.com">business-hub-fiji@risingsunfj.com</a>
+  </div>
+</footer>
+
+<nav class="qbar" aria-label="Quick access">
+  <a class="q-mall" href="/">Browse</a>
+  <a class="q-reg" href="/join">Register</a>
+  <a class="q-wa" href="https://wa.me/6799211153?text=Bula%20Business%20Hub%20Fiji%21" target="_blank" rel="noopener">WhatsApp us</a>
+</nav>
+
+<script>
+(function(){
+  "use strict";
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
+  var PRICES = { "Vinaka Featured": 15, "Tabua Premium": 40 };
+  var TRIAL = "Vinaka Featured - free first month";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function update(){
+    var plan = $("plan").value, trial = plan === TRIAL;
+    $("months-wrap").hidden = trial;
+    var m = Number($("months").value) || 1;
+    $("total").textContent = trial ? "Total: free for your first month" : "Total: FJD " + (PRICES[plan] * m) + " by M-PAiSA";
+  }
+  $("plan").addEventListener("change", update);
+  $("months").addEventListener("change", update);
+  $("up").addEventListener("input", function(){ $("err").textContent = ""; });
+  [].forEach.call(document.querySelectorAll("[data-pick]"), function(b){
+    b.addEventListener("click", function(){
+      $("plan").value = b.getAttribute("data-pick"); update();
+      $("upgrade").scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(function(){ $("ref").focus(); }, 400);
+    });
+  });
+  var q = new URLSearchParams(location.search);
+  if (q.get("ref")) $("ref").value = q.get("ref");
+  update();
+
+  function line(tag, text, html){ var e = document.createElement(tag); if (html) e.innerHTML = html; else e.textContent = text; return e; }
+
+  $("up").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var ref = $("ref").value.trim().toUpperCase();
+    if (!/^BHF-\d{6}-[A-Z0-9]{4}$/.test(ref)) { $("err").textContent = "Please enter your shop reference, like BHF-261118-AB12."; $("ref").focus(); return; }
+    $("send").disabled = true; $("send").textContent = "Sending…";
+    fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({
+      action: "plan", shop_ref: ref, plan: $("plan").value, months: $("months").value,
+      contact: $("contact").value.trim(), website: $("website").value
+    }) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok) throw new Error((res && res.error) || "x");
+        var d = $("done"); d.textContent = "";
+        d.appendChild(line("h3", res.trial ? "Vinaka! Your free month is requested" : "Vinaka! One last step: pay by M-PAiSA"));
+        if (res.trial) {
+          d.appendChild(line("p", "We'll switch on the Featured badge for " + res.business + " shortly. Your request reference is " + res.reference + "."));
+        } else {
+          var p = line("p"); p.append("Send "); p.appendChild(line("b", "FJD " + res.amount)); p.append(" by M-PAiSA to "); p.appendChild(line("b", res.pay_to));
+          p.append(", and put "); p.appendChild(line("code", res.reference)); p.append(" as the reference.");
+          d.appendChild(p);
+          d.appendChild(line("p", "Then send us your receipt on WhatsApp. Your badge goes on once we see the payment."));
+          var w = line("a", "Send my receipt on WhatsApp"); w.className = "btn btn-wa"; w.target = "_blank"; w.rel = "noopener";
+          w.href = "https://wa.me/6799211153?text=" + encodeURIComponent("Bula Business Hub Fiji, I've paid FJD " + res.amount + " for " + res.business + ". Payment reference " + res.reference + ". Receipt attached.");
+          d.appendChild(w);
+        }
+        $("up").hidden = true; d.hidden = false; d.scrollIntoView({ block: "center" });
+      })
+      .catch(function(e){
+        $("err").textContent = (e && e.message && e.message !== "x" && e.message.indexOf("fetch") < 0) ? e.message : "Couldn't send. Check your connection, or WhatsApp us on +679 921 1153.";
+      })
+      .then(function(){ $("send").disabled = false; $("send").textContent = "Request upgrade"; });
+  });
+})();
+</script>
+</body>
+</html>

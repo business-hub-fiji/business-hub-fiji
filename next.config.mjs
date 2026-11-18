@@ -7,6 +7,7 @@ const nextConfig = {
     return [
       { source: "/join", destination: "/register.html", permanent: false },
       { source: "/register", destination: "/register.html", permanent: false },
+      { source: "/plans", destination: "/plans.html", permanent: false },
       { source: "/mall", destination: "/", permanent: false },
       { source: "/market", destination: "/", permanent: false },
     ];
