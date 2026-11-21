@@ -47,3 +47,23 @@ form input:not([type=checkbox]):not([type=radio]),form select,form textarea{
 }
 header .intro{background:transparent;border:0;box-shadow:none}
 @media(prefers-reduced-motion:reduce){body::before{transition:none}}
+
+/* Visible tapestry across page panels; pale centres protect reading contrast. */
+:root{--tapestry-cloth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23eddfc3'/%3E%3Cpath d='M48 6 90 48 48 90 6 48Z M48 22 74 48 48 74 22 48Z' fill='none' stroke='%23856844' stroke-opacity='.26' stroke-width='2'/%3E%3Cpath d='M0 0 20 20M96 0 76 20M0 96 20 76M96 96 76 76M38 48h20M48 38v20' stroke='%23704d32' stroke-opacity='.22' stroke-width='3'/%3E%3Cpath d='M0 24h96M0 72h96M24 0v96M72 0v96' stroke='%23b59460' stroke-opacity='.12'/%3E%3C/svg%3E")}
+main>section:not(.hero),main>.wrap,.layout,.privacy,
+body>main:not(.wrap),.biz,.compare-box{
+  background-color:#eddfc3!important;
+  background-image:var(--tapestry-cloth)!important;
+  background-size:96px 96px!important;
+  color:#30281f;
+}
+/* Clear reading surfaces float above the cloth, without covering its margins. */
+.card,.step,.side,form,.panel,.offer,.privacy>ul{
+  background-color:#fff6e5;
+  background-image:linear-gradient(rgba(255,248,232,.94),rgba(255,248,232,.94)),var(--tapestry-cloth);
+  color:#30281f;
+}
+.privacy>ul{padding:20px 32px;border-radius:10px}
+body>main:not(.wrap)>section{background-color:rgba(255,248,232,.95)}
+header .intro,header .wrap{background-image:none!important;background-color:transparent!important}
+@media(max-width:600px){main>section:not(.hero),main>.wrap,.layout,.privacy{background-size:72px 72px!important}}
