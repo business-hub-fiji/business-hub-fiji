@@ -24,6 +24,7 @@ const btn = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head><link rel="stylesheet" href="/site-background.css" /></head>
       <body style={{
         margin: 0,
         fontFamily: "Arial, sans-serif",
@@ -58,3 +59,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+

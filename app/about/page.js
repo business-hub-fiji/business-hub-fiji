@@ -37,7 +37,7 @@ export default function Home() {
     <main style={{
       color: "#17243a",
       minHeight: "100vh",
-      background: "#f5f7fb"
+      background: "transparent"
     }}>
       <header style={{
         background: "#10213c",
@@ -252,3 +252,4 @@ const joinSecondary = {
   textDecoration:"none",
   fontWeight:"bold"
 };
+

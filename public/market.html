@@ -150,6 +150,17 @@ footer .fl{background:none;border:0;color:inherit;font:inherit;text-decoration:u
 footer{background:var(--lagoon);color:var(--lagoon-ink);padding:22px 0;font-size:.95rem}
 footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </style>
+<style>
+:root{--lagoon:#10213c;--lagoon-ink:#fff7e6;--accent:#edb84b;--accent-ink:#10213c;--bg:#fbf5e9}
+.wrap{max-width:1440px;padding-inline:clamp(16px,3vw,48px)}
+header{background:linear-gradient(90deg,rgba(9,24,42,.76),rgba(9,24,42,.32)),url('/hub-landscape.jpg') center 57%/cover}
+.intro{padding:76px 0 88px;max-width:760px}.intro h1{font-size:clamp(2.3rem,5vw,4.7rem);line-height:1.08}.intro p{font-size:1.15rem}
+.grid{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:24px;max-height:78vh;min-height:360px;overflow-y:auto;padding:8px 12px 24px 4px;scrollbar-gutter:stable;align-content:start}
+.card{padding:22px;min-height:260px}.tools{position:sticky;top:0;z-index:6;background:var(--bg);padding-block:16px}.layout{grid-template-columns:220px minmax(0,1fr);gap:32px}
+:focus-visible{outline:3px solid #b87800;outline-offset:4px}.compare-box{padding:28px 0 56px}.offer{background:white;border:1px solid #d7c9ae;border-radius:16px;padding:20px;margin-block:16px}.offer p{margin:5px 0}.compare-box input{font:inherit;padding:14px;border:1px solid #8c806c;border-radius:10px;width:100%}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.intro{padding:36px 0 48px}.grid{grid-template-columns:1fr;max-height:74vh}.card{min-height:220px}.topnav{flex-wrap:wrap}.tools{top:0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important}}
+</style><link rel="stylesheet" href="/site-background.css">
 </head>
 <body>
 <header>
@@ -172,7 +183,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <button type="button" id="welcome-close" aria-label="Close">×</button>
     </div>
     <div class="intro">
-      <h1>The Mall</h1>
+      <h1>Local roots. A connected future.</h1>
       <p>Local shops and services from around Fiji. Message the business directly and pay their way: M-PAiSA, QR or bank transfer.</p>
     </div>
   </div>
@@ -197,7 +208,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       </div>
 
       <div class="spot" id="spot" hidden></div>
-      <div class="grid" id="grid" aria-busy="true">
+      <div class="grid" id="grid" aria-busy="true" tabindex="0" role="region" aria-label="Scroll business listings">
         <div class="skel"></div><div class="skel"></div><div class="skel"></div>
       </div>
       <div class="state" id="state" hidden></div>
@@ -211,7 +222,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       </div>
     </section>
   </div>
-</main>
+<section class="compare-box" aria-labelledby="compare-title"><h2 id="compare-title">Compare product offers</h2><p>Search supermarket and hardware products. Only complete, matching specifications are grouped. Prices and stock are supplied by each business.</p><label for="product-query">Product, brand or specification</label><input id="product-query" type="search" placeholder="For example: cement 40 kg"><div id="product-results" aria-live="polite">Loading product offers…</div></section></main><script src="/compare.js"></script>
 
 <footer>
   <div class="wrap">
@@ -577,3 +588,4 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </script>
 </body>
 </html>
+

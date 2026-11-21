@@ -1,0 +1,69 @@
+/* Shared sunset backdrop; content scrolls above a fixed, decorative photo. */
+html{background:#493326}
+body{background:transparent!important;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(22,29,44,.28),rgba(22,29,44,.48)),url('/hub-sunset.jpg') center 48%/cover no-repeat}
+body>main{background:transparent!important}
+main>section:not(.hero),main>.wrap,.layout,.privacy{background:color-mix(in srgb,var(--bg,#f5f7fb) 92%,transparent);border-radius:18px}
+.layout{padding:24px 18px 40px}
+main>section:not(.hero){margin:20px 0;padding:32px 20px}
+main>.wrap{padding:24px}
+.card,.step,.side,form,.panel{box-shadow:0 8px 28px rgba(16,33,60,.12)}
+@media(max-width:600px){main>section:not(.hero){padding:24px 12px}.layout,main>.wrap{padding:16px 12px}body::before{background-position:58% center}}
+
+/* Banner copy stays directly on its original landscape. */
+header .intro{background:transparent;border-radius:0;color:inherit}
+
+/* Classic woven panels, inspired by cloth and basket textures. */
+main>section:not(.hero),main>.wrap,.layout,.privacy,
+.card,.step,.side,form,.panel,.offer{
+  --ink:#30281f;--muted:#625344;--line:#c4ae87;
+  --bg:#f5ecd9;--surface:#fff8e9;--chip:#eadcc0;
+  color:var(--ink);
+  background-color:#f5ecd9;
+  background-image:repeating-linear-gradient(0deg,rgba(111,79,41,.035) 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,rgba(111,79,41,.03) 0 1px,transparent 1px 5px);
+  border:1px solid #c4ae87;
+}
+.card,.step,.side,form,.panel,.offer{
+  border-top:6px solid #7a5235;
+  border-bottom:3px solid #b18a50;
+  box-shadow:inset 0 0 0 4px #f5ecd9,inset 0 0 0 5px rgba(122,82,53,.23),0 8px 24px rgba(44,28,17,.16);
+  border-radius:12px;
+}
+.card h3,.step h3,.panel h2,.offer h3{
+  font-family:Georgia,'Times New Roman',serif;
+  color:#493221;letter-spacing:.01em;
+}
+.card p,.step p,.panel p,.offer p{color:#625344}
+.card .btn,.offer .btn{background:#fff8e9;color:#493221;border-color:#a68a60}
+.card .chip,.card .tag{background:#eadcc0;color:#493221}
+form input:not([type=checkbox]):not([type=radio]),form select,form textarea{
+  background:#fffaf0;color:#30281f;border-color:#b7a17c;
+}
+.tools{background:#f5ecd9;border-radius:10px;padding-inline:12px}
+/* A quiet diamond border stays away from text and business photographs. */
+.layout,.privacy{
+  border-top:10px solid #a47b4d;
+  border-image:repeating-linear-gradient(45deg,#67452d 0 8px,#d9c294 8px 16px,#8e6640 16px 24px) 10;
+}
+header .intro{background:transparent;border:0;box-shadow:none}
+@media(prefers-reduced-motion:reduce){body::before{transition:none}}
+
+/* Visible tapestry across page panels; pale centres protect reading contrast. */
+:root{--tapestry-cloth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23eddfc3'/%3E%3Cpath d='M48 6 90 48 48 90 6 48Z M48 22 74 48 48 74 22 48Z' fill='none' stroke='%23856844' stroke-opacity='.26' stroke-width='2'/%3E%3Cpath d='M0 0 20 20M96 0 76 20M0 96 20 76M96 96 76 76M38 48h20M48 38v20' stroke='%23704d32' stroke-opacity='.22' stroke-width='3'/%3E%3Cpath d='M0 24h96M0 72h96M24 0v96M72 0v96' stroke='%23b59460' stroke-opacity='.12'/%3E%3C/svg%3E")}
+main>section:not(.hero),main>.wrap,.layout,.privacy,
+body>main:not(.wrap),.biz,.compare-box{
+  background-color:#eddfc3!important;
+  background-image:var(--tapestry-cloth)!important;
+  background-size:96px 96px!important;
+  color:#30281f;
+}
+/* Clear reading surfaces float above the cloth, without covering its margins. */
+.card,.step,.side,form,.panel,.offer,.privacy>ul{
+  background-color:#fff6e5;
+  background-image:linear-gradient(rgba(255,248,232,.94),rgba(255,248,232,.94)),var(--tapestry-cloth);
+  color:#30281f;
+}
+.privacy>ul{padding:20px 32px;border-radius:10px}
+body>main:not(.wrap)>section{background-color:rgba(255,248,232,.95)}
+header .intro,header .wrap{background-image:none!important;background-color:transparent!important}
+@media(max-width:600px){main>section:not(.hero),main>.wrap,.layout,.privacy{background-size:72px 72px!important}}
