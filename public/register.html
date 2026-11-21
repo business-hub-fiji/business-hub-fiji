@@ -183,8 +183,8 @@ footer a{color:inherit !important}
       </div>
       <div class="facts">
         <span class="chip">No sign-up fee</span>
-        <span class="chip">No monthly fee</span>
-        <span class="chip">Small commission per sale</span>
+        <span class="chip">Optional paid plans</span>
+        <span class="chip">Commercial terms agreed separately</span>
       </div>
     </div>
   </div>
@@ -195,11 +195,11 @@ footer a{color:inherit !important}
 <section id="how">
   <div class="wrap">
     <h2>How it works</h2>
-    <p class="lead">Registering takes about two minutes and costs nothing. Businesses go live in the mall straight away.</p>
+    <p class="lead">Registering takes about two minutes and costs nothing. Businesses are reviewed before publication.</p>
     <div class="steps">
       <div class="step"><h3>Choose customer or business</h3><p>Customers find and buy from local shops. Businesses get their own shop in the mall.</p></div>
       <div class="step"><h3>Leave your details</h3><p>Email, phone or WhatsApp, whichever suits you. You get a registration reference straight away.</p></div>
-      <div class="step"><h3>Step into the mall</h3><p>You go straight to the mall. Businesses appear there right away, and our team checks each registration number or TIN.</p></div>
+      <div class="step"><h3>Step into the mall</h3><p>You go straight to the mall. Our team checks each business registration number or TIN before approving its public listing.</p></div>
     </div>
   </div>
 </section>
@@ -207,12 +207,12 @@ footer a{color:inherit !important}
 <section id="business" class="biz">
   <div class="wrap">
     <h2>For businesses</h2>
-    <p class="lead">Your shop, your customers, your payments. The hub only earns when you make a sale.</p>
+    <p class="lead">Your shop, your customers, your payments. Optional paid plans support advertising and expanded storefronts.</p>
     <div class="two">
       <ul class="terms">
-        <li><span><strong>Commission only.</strong> No sign-up fee and no monthly subscription. A small commission is charged on sales made through the hub.</span></li>
+        <li><span><strong>Commission only.</strong> Free listing is available. Optional Featured and Premium plans are described on the Plans page. Sales commissions require separately agreed terms.</span></li>
         <li><span><strong>You keep your payments.</strong> Customers pay you directly with M-PAiSA, QR or bank transfer.</span></li>
-        <li><span><strong>Monthly settlement.</strong> Commission is cleared at the end of each month to keep your shop live and taking orders.</span></li>
+        <li><span><strong>Monthly settlement.</strong> Any agreed sales commissions are reconciled separately. Plan payments use the instructions on the Plans page.</span></li>
         <li><span><strong>Genuine shops only.</strong> Every business gives a registration number or TIN, and we take down any listing that isn't genuine.</span></li>
       </ul>
       <div>
@@ -453,6 +453,7 @@ footer a{color:inherit !important}
   </div>
 </footer>
 
+<p style="padding:0 18px">Business registrations require an email for dashboard login codes. New listings stay private until review.</p>
 <script>
 (function(){
   // SETTINGS
@@ -531,6 +532,7 @@ footer a{color:inherit !important}
     }
     ok = setErr("town", val("town") ? "" : "Please choose your town.") && ok;
     if (isBiz) {
+      ok = setErr("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? "" : "Enter a business email for welcome messages and dashboard login codes.") && ok;
       ok = setErr("bizname", val("bizname") ? "" : "Please enter your business name.") && ok;
       ok = setErr("category", val("category") ? "" : "Please choose a category.") && ok;
       ok = setErr("regno", val("regno").replace(/[^A-Za-z0-9]/g, "").length >= 4 ? "" : "Please enter your business registration number or TIN.") && ok;
@@ -594,6 +596,7 @@ footer a{color:inherit !important}
   }
 
   var lastText = "";
+  var pendingSubmission = null;
 
   function showDone(data, posted){
     lastText = toText(data);
@@ -603,12 +606,10 @@ footer a{color:inherit !important}
     $("wa").href = "https://wa.me/" + HUB_WHATSAPP + "?text=" + encodeURIComponent(subject + "\n\n" + lastText);
     $("mail").href = "mailto:" + HUB_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(lastText);
     if (posted) {
-      // Saved: take them straight to the mall, with their reference shown there.
-      try {
-        location.assign("/?welcome=" + encodeURIComponent(data.reference) + (data.joining_as === "Business" ? "&biz=1" : ""));
-      } catch (e) {}
-      $("done-title").textContent = "Registration received";
-      $("done-msg").textContent = "Thanks! The Business Hub team will contact you soon. Keep your reference to change or remove your details later.";
+      $("done-title").textContent = "Registration saved";
+      $("done-msg").textContent = data.joining_as === "Business"
+        ? "Your business is awaiting review and is not public yet. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery. Visit /dashboard and use this reference to request a login code at your business email."
+        : "Your registration is saved. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery.";
       $("send-row").hidden = true; $("mail-note").hidden = true;
     } else {
       $("done-title").textContent = "Almost done";
@@ -626,7 +627,13 @@ footer a{color:inherit !important}
       if (first) first.focus();
       return;
     }
-    var data = collect(makeRef());
+    var candidate = collect(pendingSubmission ? pendingSubmission.reference : makeRef());
+    if (pendingSubmission) candidate.submitted = pendingSubmission.submitted;
+    if (pendingSubmission && JSON.stringify(candidate) !== JSON.stringify(pendingSubmission)) {
+      $("send-err").textContent = "Your previous submission may already be saved. Keep its reference " + pendingSubmission.reference + " and contact support before submitting changed details."; return;
+    }
+    var data = pendingSubmission || candidate;
+    pendingSubmission = data;
     $("send-err").textContent = "";
     if (!GAS && !FORM_ENDPOINT) { showDone(data, false); return; }
 
@@ -660,6 +667,7 @@ footer a{color:inherit !important}
   });
 
   $("again").addEventListener("click", function(){
+    pendingSubmission = null;
     form.reset(); syncRole(); syncVia();
     $("copy").textContent = "Copy details";
     done.hidden = true; form.hidden = false;
@@ -674,3 +682,4 @@ footer a{color:inherit !important}
 </nav>
 </body>
 </html>
+
