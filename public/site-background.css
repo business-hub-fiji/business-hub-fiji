@@ -3,9 +3,12 @@ html{background:#493326}
 body{background:transparent!important;isolation:isolate}
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(22,29,44,.28),rgba(22,29,44,.48)),url('/hub-sunset.jpg') center 48%/cover no-repeat}
 body>main{background:transparent!important}
-main>section:not(.hero),main>.wrap,.layout,.intro,.privacy{background:color-mix(in srgb,var(--bg,#f5f7fb) 92%,transparent);border-radius:18px}
+main>section:not(.hero),main>.wrap,.layout,.privacy{background:color-mix(in srgb,var(--bg,#f5f7fb) 92%,transparent);border-radius:18px}
 .layout{padding:24px 18px 40px}
 main>section:not(.hero){margin:20px 0;padding:32px 20px}
 main>.wrap{padding:24px}
 .card,.step,.side,form,.panel{box-shadow:0 8px 28px rgba(16,33,60,.12)}
 @media(max-width:600px){main>section:not(.hero){padding:24px 12px}.layout,main>.wrap{padding:16px 12px}body::before{background-position:58% center}}
+
+/* Banner copy stays directly on its original landscape. */
+header .intro{background:transparent;border-radius:0;color:inherit}
