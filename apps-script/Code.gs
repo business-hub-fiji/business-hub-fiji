@@ -463,16 +463,58 @@ function loginStart_(raw) {
   if (!shop) return { ok: false, error: 'We could not find a business with that reference. Check it, or WhatsApp us on +679 921 1153.' };
   var email = String(cell_(shop, 'Email')).replace(/^'/, '').trim();
   if (!EMAIL_RE.test(email)) return { ok: false, error: 'There is no email on file for this shop. WhatsApp us on +679 921 1153 and we will add one.' };
-  var cache = CacheService.getScriptCache();
-  if (cache.get('sent_' + ref)) return { ok: true, email_hint: maskEmail_(email), already: true };
-  var code = String(Math.floor(100000 + Math.random() * 900000));
-  cache.put('code_' + ref, JSON.stringify({ code: code, tries: 0 }), 600);
-  cache.put('sent_' + ref, '1', 60);
-  MailApp.sendEmail(email, 'Your Business Hub Fiji login code: ' + code,
-    'Bula,\n\nYour login code for the ' + String(cell_(shop, 'Business name')).replace(/^\'/, '') + ' dashboard is:\n\n' + code +
-    '\n\nIt works for 10 minutes. If you did not ask for this, you can ignore this email.\n\nVinaka,\nBusiness Hub Fiji',
-    { name: SENDER_NAME, replyTo: HUB_EMAIL });
-  return { ok: true, email_hint: maskEmail_(email) };
+  var cache = CacheService.getScriptCache(), lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return { ok: false, error: 'Please wait a moment and try again.' };
+  try {
+    if (cache.get('sent_' + ref)) return { ok: true, email_hint: maskEmail_(email), already: true };
+    if (cache.get('send_attempt_' + ref)) return { ok: false, error: 'Please wait one minute before requesting another login email.' };
+    var code = String(Math.floor(100000 + Math.random() * 900000));
+    var text = 'Bula,\n\nYour login code for the ' + String(cell_(shop, 'Business name')).replace(/^\'/, '') + ' dashboard is:\n\n' + code +
+      '\n\nIt works for 10 minutes. If you did not ask for this, you can ignore this email.\n\nVinaka,\nBusiness Hub Fiji';
+    // A failed send must not leave a usable code or report success.
+    cache.remove('code_' + ref);
+    cache.put('send_attempt_' + ref, '1', 60);
+    var delivery = sendLoginEmail_(email, text);
+    if (!delivery.ok) return delivery;
+    cache.put('code_' + ref, JSON.stringify({ code: code, tries: 0, expires: Date.now() + 600000 }), 600);
+    cache.put('sent_' + ref, '1', 60);
+    return { ok: true, email_hint: maskEmail_(email) };
+  } finally { lock.releaseLock(); }
+}
+
+/** Server-only transport selection; never accept sender, provider or recipient from the browser. */
+function sendLoginEmail_(email, text) {
+  var props = PropertiesService.getScriptProperties();
+  var provider = String(props.getProperty('LOGIN_EMAIL_PROVIDER') || 'google').trim().toLowerCase();
+  try {
+    if (provider === 'google') {
+      MailApp.sendEmail(email, 'Your Business Hub Fiji login code', text,
+        { name: SENDER_NAME, replyTo: HUB_EMAIL });
+      return { ok: true };
+    }
+    if (provider !== 'resend') throw new Error('unsupported provider');
+    var key = props.getProperty('RESEND_API_KEY');
+    var from = String(props.getProperty('LOGIN_EMAIL_FROM') || '').trim();
+    if (!key || !EMAIL_RE.test(from)) throw new Error('missing email configuration');
+    var response = UrlFetchApp.fetch('https://api.resend.com/emails', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { Authorization: 'Bearer ' + key },
+      payload: JSON.stringify({ from: SENDER_NAME + ' <' + from + '>', to: [email],
+        subject: 'Your Business Hub Fiji login code', text: text, reply_to: HUB_EMAIL })
+    });
+    var status = response.getResponseCode(), result = {};
+    try { result = JSON.parse(response.getContentText()); } catch (ignored) {}
+    if (status < 200 || status >= 300 || !result.id) {
+      // Do not log response bodies: they can contain private message data.
+      console.error('Login email rejected by provider; HTTP ' + status);
+      return { ok: false, error: 'We could not send your login email. Please wait one minute and try again, or contact Business Hub support.' };
+    }
+    return { ok: true };
+  } catch (err) {
+    // Exceptions can include authorization headers. Keep keys and login codes out of logs.
+    console.error('Login email transport unavailable: ' + provider);
+    return { ok: false, error: 'Login email is temporarily unavailable. Please contact Business Hub support.' };
+  }
 }
 
 function loginVerify_(raw) {
@@ -480,8 +522,9 @@ function loginVerify_(raw) {
   var cache = CacheService.getScriptCache(), saved = cache.get('code_' + ref);
   if (!saved) return { ok: false, error: 'That code has expired. Please ask for a new one.' };
   var s = JSON.parse(saved);
+  if (s.expires && Date.now() >= s.expires) { cache.remove('code_' + ref); return { ok: false, error: 'That code has expired. Please ask for a new one.' }; }
   if (s.tries >= 5) { cache.remove('code_' + ref); return { ok: false, error: 'Too many tries. Please ask for a new code.' }; }
-  if (code !== s.code) { s.tries++; cache.put('code_' + ref, JSON.stringify(s), 600); return { ok: false, error: 'That code is not right. Check the email and try again.' }; }
+  if (code !== s.code) { s.tries++; cache.put('code_' + ref, JSON.stringify(s), s.expires ? Math.max(1, Math.ceil((s.expires - Date.now()) / 1000)) : 600); return { ok: false, error: 'That code is not right. Check the email and try again.' }; }
   cache.remove('code_' + ref);
   var token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
   cache.put('sess_' + token, ref, 21600);
