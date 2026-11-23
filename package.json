@@ -5,11 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test tests/operations.test.cjs tests/business-desk-ui.test.cjs"
   },
   "dependencies": {
     "next": "15.5.9",
     "react": "19.1.1",
     "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "jsdom": "^31.0.1"
   }
 }
