@@ -127,7 +127,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
 
     <section id="prod-sec" hidden>
       <div class="sec-h"><h2>Products &amp; services</h2><span class="hint" id="prod-count"></span></div>
-      <div class="products" id="products" style="margin-top:14px"></div>
+      <div id="products" style="margin-top:14px"></div>
     </section>
 
     <section id="gal-sec" hidden>
@@ -148,6 +148,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
   <nav class="sticky" id="sticky" aria-label="Contact this shop"></nav>
 </div>
 
+<script src="/shop-categories.js"></script>
 <script>
 (function(){
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
@@ -237,7 +238,11 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
       $("prod-sec").hidden = false;
       $("prod-count").textContent = prods.length + (prods.length === 1 ? " item" : " items");
       var g = $("products");
-      prods.forEach(function(p){
+      ShopCategories.group(prods, s.category).forEach(function(group) {
+        var section = el("section"), heading = el("h3", null, group.name);
+        section.appendChild(heading);
+        var grid = el("div", "products"); section.appendChild(grid); g.appendChild(section);
+        group.products.forEach(function(p){
         var card = el("article", "prod");
         if (p.photo && PHOTO_OK.test(p.photo)) { var im = el("img"); im.src = p.photo; im.alt = p.name; im.loading = "lazy"; card.appendChild(im); }
         else card.appendChild(el("div", "noimg", (p.name || "?").charAt(0).toUpperCase()));
@@ -247,7 +252,8 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
         if (p.description) b.appendChild(el("p", "d", p.description));
         card.appendChild(b);
         if (wa) card.appendChild(link("Ask on WhatsApp", "https://wa.me/" + wa + "?text=" + encodeURIComponent("Bula " + s.name + ", I saw \"" + p.name + "\" on your Business Hub Fiji shop. Is it available?"), "btn btn-wa btn-small", "Shop page product"));
-        g.appendChild(card);
+        grid.appendChild(card);
+        });
       });
     }
 

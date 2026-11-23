@@ -498,13 +498,13 @@ function session_(token) {
 function productsFor_(ref, onlyAvailable) {
   var sh = book_().getSheetByName(PRODUCTS_SHEET);
   if (!sh) return [];
-  var v = sh.getDataRange().getValues(), out = [];
+  var v = sh.getDataRange().getValues(), out = [], categoryColumn = productCategoryColumn_(sh, false);
   for (var r = 1; r < v.length; r++) {
     if (String(v[r][1]) !== ref) continue;
     var avail = v[r][6] !== 'No';
     if (onlyAvailable && !avail) continue;
     out.push({ id: String(v[r][0]), name: plain_(v[r][2]), price: v[r][3] === '' ? '' : Number(v[r][3]),
-      description: plain_(v[r][4]), photo: PHOTO_RE.test(String(v[r][5])) ? String(v[r][5]) : '', available: avail });
+      category: categoryColumn ? plain_(v[r][categoryColumn - 1]).slice(0, 80) : '', description: plain_(v[r][4]), photo: PHOTO_RE.test(String(v[r][5])) ? String(v[r][5]) : '', available: avail });
   }
   return out;
 }
@@ -598,6 +598,7 @@ function productSave_(ref, raw) {
   var shop = findShop_(ref);
   if (!shop) return { ok: false, error: 'Shop not found.' };
   var name = cut_(raw.name, 80);
+  if (String(raw.category || "").trim().length > 80) return { ok: false, error: "Category must be 80 characters or fewer." };
   if (!name) return { ok: false, error: 'Please give the product a name.' };
   var price = String(raw.price == null ? '' : raw.price).replace(/[^0-9.]/g, '');
   if (price && !/^\d{1,7}(\.\d{1,2})?$/.test(price)) return { ok: false, error: 'Please enter the price as a number, like 25 or 12.50.' };
@@ -620,7 +621,11 @@ function productSave_(ref, raw) {
     safe_(cut_(raw.description, 400)), photo, raw.available === false || raw.available === 'No' ? 'No' : 'Yes', new Date()];
   var lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
-    if (row > 0) sh.getRange(row, 1, 1, values.length).setValues([values]); else sh.appendRow(values);
+    if (row > 0) sh.getRange(row, 1, 1, values.length).setValues([values]); else { sh.appendRow(values); row = sh.getLastRow(); }
+    // An omitted category preserves the existing value for older clients.
+    if (Object.prototype.hasOwnProperty.call(raw, 'category')) {
+      sh.getRange(row, productCategoryColumn_(sh, true)).setValue(safe_(cut_(raw.category, 80)));
+    }
   } finally { lock.releaseLock(); }
   clearCaches_(shop);
   return { ok: true, products: productsFor_(ref, false) };
