@@ -168,6 +168,7 @@ function doGet(e) {
 function doPost(e) {
   var data = {};
   try { data = JSON.parse(e.postData.contents); } catch (err) { data = (e && e.parameter) || {}; }
+  if (/^ops_/.test(data.action || '')) return json_(operations_(data));
   if (data.action === 'click') return json_(click_(data));
   if (data.action === 'report') return json_(report_(data));
   if (data.action === 'plan') return json_(planRequest_(data));

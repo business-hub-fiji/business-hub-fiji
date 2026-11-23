@@ -5,6 +5,7 @@ const nextConfig = {
       { source: "/", destination: "/market.html" },
       { source: "/shop/:slug", destination: "/shop.html" },
       { source: "/dashboard", destination: "/dashboard.html" },
+      { source: "/manage", destination: "/manage.html" },
     ];
   },
   async redirects() {
