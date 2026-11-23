@@ -159,6 +159,7 @@ function setupExtras_(ss) {
 }
 
 function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'mall_offers') return json_(publicMallOffers_());
   var action = e && e.parameter && e.parameter.action;
   if (action === 'listings') return json_({ ok: true, listings: listings_() });
   if (action === 'shop') return json_(publicShop_(cut_(e.parameter.slug, 80)));
@@ -498,13 +499,13 @@ function session_(token) {
 function productsFor_(ref, onlyAvailable) {
   var sh = book_().getSheetByName(PRODUCTS_SHEET);
   if (!sh) return [];
-  var v = sh.getDataRange().getValues(), out = [], categoryColumn = productCategoryColumn_(sh, false);
+  var v = sh.getDataRange().getValues(), out = [], categoryColumn = productCategoryColumn_(sh, false), mainCategoryColumn = productFieldColumn_(sh, 'Main mall category', false);
   for (var r = 1; r < v.length; r++) {
     if (String(v[r][1]) !== ref) continue;
     var avail = v[r][6] !== 'No';
     if (onlyAvailable && !avail) continue;
     out.push({ id: String(v[r][0]), name: plain_(v[r][2]), price: v[r][3] === '' ? '' : Number(v[r][3]),
-      category: categoryColumn ? plain_(v[r][categoryColumn - 1]).slice(0, 80) : '', description: plain_(v[r][4]), photo: PHOTO_RE.test(String(v[r][5])) ? String(v[r][5]) : '', available: avail });
+      main_category: mainCategoryColumn ? plain_(v[r][mainCategoryColumn - 1]).slice(0, 80) : '', category: categoryColumn ? plain_(v[r][categoryColumn - 1]).slice(0, 80) : '', description: plain_(v[r][4]), photo: PHOTO_RE.test(String(v[r][5])) ? String(v[r][5]) : '', available: avail });
   }
   return out;
 }
@@ -598,6 +599,7 @@ function productSave_(ref, raw) {
   var shop = findShop_(ref);
   if (!shop) return { ok: false, error: 'Shop not found.' };
   var name = cut_(raw.name, 80);
+  if (raw.main_category && CATEGORY_LIST.indexOf(raw.main_category) < 0) return { ok: false, error: 'Please choose a main mall category.' };
   if (String(raw.category || "").trim().length > 80) return { ok: false, error: "Category must be 80 characters or fewer." };
   if (!name) return { ok: false, error: 'Please give the product a name.' };
   var price = String(raw.price == null ? '' : raw.price).replace(/[^0-9.]/g, '');
@@ -622,6 +624,9 @@ function productSave_(ref, raw) {
   var lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     if (row > 0) sh.getRange(row, 1, 1, values.length).setValues([values]); else { sh.appendRow(values); row = sh.getLastRow(); }
+    if (Object.prototype.hasOwnProperty.call(raw, 'main_category')) {
+      sh.getRange(row, productFieldColumn_(sh, 'Main mall category', true)).setValue(safe_(cut_(raw.main_category, 80)));
+    }
     // An omitted category preserves the existing value for older clients.
     if (Object.prototype.hasOwnProperty.call(raw, 'category')) {
       sh.getRange(row, productCategoryColumn_(sh, true)).setValue(safe_(cut_(raw.category, 80)));
