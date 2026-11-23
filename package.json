@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test tests/operations.test.cjs tests/business-desk-ui.test.cjs tests/recruitment.test.cjs tests/product-actions.test.cjs tests/security-config.test.cjs"
+    "test": "node --test tests/operations.test.cjs tests/business-desk-ui.test.cjs tests/recruitment.test.cjs tests/product-actions.test.cjs tests/security-config.test.cjs tests/recruitment-ui.test.cjs"
   },
   "dependencies": {
     "next": "15.5.29",

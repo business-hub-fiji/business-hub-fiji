@@ -1,6 +1,6 @@
 # Business Hub Fiji release review — 24 November 2026 (Fiji)
 
-Decision: HOLD. Do not merge recruitment/release changes yet. The owner approved merging only after restructuring, retesting and security checks. That condition is not satisfied. No payment or outbound contact has been made by this review.
+Decision: HOLD further release activation. PR11 was merged independently at 2026-11-23T20:11:29Z and Vercel reports production deployment succeeded; its unresolved gates still apply. The owner approved merging only after restructuring, retesting and security checks. That condition is not satisfied. No payment or outbound contact has been made by this review.
 
 ## Scope and evidence
 
@@ -15,11 +15,12 @@ Current independently edited Apps Script source is not available through the Git
 - Next.js 15.5.9 -> 15.5.29, plus exact patched PostCSS 8.5.23 and Sharp 0.35.5 overrides; no major framework migration. Initial production dependency audit: one critical and two high package findings. Audit after changes: zero reported production vulnerabilities. Registry audit is evidence about known packages, not a security guarantee.
 - Browser headers: nosniff, DENY framing, strict-origin-when-cross-origin referrers, disabled unused device permissions, base-uri self/object-src none/frame-ancestors none; remove X-Powered-By. CSP deliberately does not restrict inline scripts yet, because existing static pages depend on them. This is not a complete XSS policy.
 - Product deletion reconciles an uncertain response using authenticated shop_get, never automatically repeats the delete, and blocks immediate retry when outcome cannot be confirmed. It does not fix or identify the original backend/transport cause. Real authenticated live deletion remains pending.
+- Recruitment controls are disabled during requests and a synchronous guard suppresses duplicate requests; regression test covers delayed save/draft responses and blocked prospect switching/logout.
 - GitHub Actions checks install, registered tests, production dependency audit and build. Existing scratch tests for unmerged login-provider work are not the canonical main branch suite and are not included. Canonical authentication tests must follow live-source reconciliation.
 
 ## Checks passed
 
-22 registered tests: business desk UI demo, business-rule validation, server-derived pricing, stock rollback, idempotent requests, quote conversion, payments/overpay rejection, void rules, cross-shop isolation in mocked backend, storage limits, recruitment validation/deduplication/concurrent edits, deletion reconciliation and header/script checks. Production build passes Next.js 15.5.29. Credential-pattern scan in inspected app/public/backend source found no matching OpenAI/Google/Resend/GitHub key patterns (not a complete git-history secret audit).
+23 registered tests: business desk UI demo, business-rule validation, server-derived pricing, stock rollback, idempotent requests, quote conversion, payments/overpay rejection, void rules, cross-shop isolation in mocked backend, storage limits, recruitment validation/deduplication/concurrent edits, deletion reconciliation and header/script checks. Production build passes Next.js 15.5.29. Credential-pattern scan in inspected app/public/backend source found no matching OpenAI/Google/Resend/GitHub key patterns (not a complete git-history secret audit).
 
 ## Launch blockers and required acceptance evidence
 
@@ -32,4 +33,4 @@ Current independently edited Apps Script source is not available through the Git
 
 ## Release gate
 
-Keep PR11 draft. Once the blockers are resolved, rerun canonical tests/build/dependency audit and real authenticated acceptance tests on an isolated preview, then merge the reviewed exact head under the owner's existing conditional approval. Confirm production deployment and repeat smoke checks. Do not infer production readiness from a Vercel READY status alone. No system can be guaranteed fully secure, and this is an engineering review rather than a penetration-test or payment-provider certification.
+PR11 is already merged. Keep follow-up changes in review and recruitment inactive until the blockers are resolved. Once the blockers are resolved, rerun canonical tests/build/dependency audit and real authenticated acceptance tests on an isolated preview, then merge the reviewed exact head under the owner's existing conditional approval. Confirm production deployment and repeat smoke checks. Do not infer production readiness from a Vercel READY status alone. No system can be guaranteed fully secure, and this is an engineering review rather than a penetration-test or payment-provider certification.
