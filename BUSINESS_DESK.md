@@ -75,8 +75,12 @@ is lost on reload. There is no background sale queue and no claim of offline POS
 
 ## Validation
 
-`node --test tests/operations.test.cjs` verifies stock, totals, overpayment,
+`npm ci` then `npm test` verifies stock, totals, overpayment,
 idempotency, quote conversion, voiding, tenant isolation, auth and storage limits.
-The browser demo exercises the actual shared rules without external effects.
+Three additional DOM interface tests exercise sale entry, partial payment,
+settlement, print output, quote conversion, invalid stock and the real login gate.
+The demo exercises the actual shared rules without external effects. `npm run build`
+passes. The hosted preview is protected by Vercel sign-in, so visual browser
+verification remains pending.
 Live Apps Script deployment, authenticated multi-user testing and real payment
 integration have not been performed as part of this change.

@@ -28,9 +28,11 @@
   }
   async function api(body) {
     if (demo) {
-      var result = OpsCore.execute(state, body, { now: new Date().toISOString(), id: uid, catalog: catalog });
-      state = result.state; write('bhf_ops_demo', JSON.stringify(state));
-      return Object.assign(result.result, { business: 'Sample Fiji business', catalog: [] });
+      try {
+        var result = OpsCore.execute(state, body, { now: new Date().toISOString(), id: uid, catalog: catalog });
+        state = result.state; write('bhf_ops_demo', JSON.stringify(state));
+        return Object.assign(result.result, { business: 'Sample Fiji business', catalog: [] });
+      } catch (err) { return { ok: false, error: err.message }; }
     }
     var controller = new AbortController(), timer = setTimeout(function () { controller.abort(); }, 30000);
     try {
@@ -69,6 +71,7 @@
       var action = pending.action;
       pending = null; write(pendingKey, null); apply(result);
       if (action === 'ops_document') { cart = []; $('document-form').reset(); renderCart(); syncKind(); }
+      if (action === 'ops_stock') { $('stock-form').reset(); $('stock-id').onchange(); }
       message('Saved to your business records.');
     } catch (e) {
       message(pending ? 'Save is unconfirmed. Retry the same update below; it will not create a duplicate.' : e.message);
