@@ -226,7 +226,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
           <label>Name <input id="p-name" maxlength="80" required></label>
           <label>Price in FJD <small>Leave empty for "ask for price".</small><input id="p-price" inputmode="decimal" maxlength="12" placeholder="25.00"></label>
         </div>
-        <fieldset><legend>Product comparison details</legend><p>Complete these for supermarket and hardware comparisons. Use identical wording only for equivalent products. Delivery prices apply only to the named zone.</p><div class="grid2"><label>Brand<input id="cmp-brand" maxlength="160"></label><label>Model or product type<input id="cmp-model" maxlength="160"></label><label>Exact specification (grade, dimensions, thickness)<input id="cmp-specification" maxlength="160"></label><label>Pack quantity<input id="cmp-quantity" maxlength="160"></label><label>Unit (kg, L, m, each)<input id="cmp-unit" maxlength="160"></label><label>Branch<input id="cmp-branch" maxlength="160"></label><label>Delivery zone<input id="cmp-delivery_zone" maxlength="160"></label><label>Delivery charge FJD (blank if unknown)<input id="cmp-delivery" maxlength="160"></label><label>Promotion expiry YYYY-MM-DD (optional)<input id="cmp-promotion_until" maxlength="160"></label></div></fieldset><label>Product or service category<input id="p-category" list="product-category-options" maxlength="80" placeholder="Choose a category or enter your own"><datalist id="product-category-options"></datalist></label><label>Description <textarea id="p-desc" maxlength="400" rows="3"></textarea></label>
+        <fieldset><legend>Product comparison details</legend><p>Complete these for supermarket and hardware comparisons. Use identical wording only for equivalent products. Delivery prices apply only to the named zone.</p><div class="grid2"><label>Brand<input id="cmp-brand" maxlength="160"></label><label>Model or product type<input id="cmp-model" maxlength="160"></label><label>Exact specification (grade, dimensions, thickness)<input id="cmp-specification" maxlength="160"></label><label>Pack quantity<input id="cmp-quantity" maxlength="160"></label><label>Unit (kg, L, m, each)<input id="cmp-unit" maxlength="160"></label><label>Branch<input id="cmp-branch" maxlength="160"></label><label>Delivery zone<input id="cmp-delivery_zone" maxlength="160"></label><label>Delivery charge FJD (blank if unknown)<input id="cmp-delivery" maxlength="160"></label><label>Promotion expiry YYYY-MM-DD (optional)<input id="cmp-promotion_until" maxlength="160"></label></div></fieldset><label>Main mall category<select id="p-main-category"><option value="">Use my business category</option><option value="Fish &amp; food">Fish &amp; food</option><option value="Supermarket &amp; grocery">Supermarket &amp; grocery</option><option value="Restaurant &amp; takeaway">Restaurant &amp; takeaway</option><option value="Hardware &amp; building">Hardware &amp; building</option><option value="Land development &amp; civil works">Land development &amp; civil works</option><option value="Land surveying">Land surveying</option><option value="Land consultancy">Land consultancy</option><option value="Car rental">Car rental</option><option value="Carwash">Carwash</option><option value="Transport &amp; delivery">Transport &amp; delivery</option><option value="Clothing &amp; retail">Clothing &amp; retail</option><option value="Other services">Other services</option></select></label><label>Subcategory<input id="p-category" list="product-category-options" maxlength="80" placeholder="Choose a category or enter your own"><datalist id="product-category-options"></datalist></label><label>Description <textarea id="p-desc" maxlength="400" rows="3"></textarea></label>
         <div class="row">
           <img class="preview" id="p-preview" alt="" hidden>
           <div class="row">
@@ -481,9 +481,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   function openProd(p){
     editing = p || null; pPhoto = null; pRemove = false;
     var options = $("product-category-options"); options.textContent = "";
-    ShopCategories.suggestions(shop.category).forEach(function(label) {
+    ShopCategories.suggestions(p && p.main_category || shop.category).forEach(function(label) {
       var option = document.createElement("option"); option.value = label; options.appendChild(option);
     });
+    $("p-main-category").value = p && p.main_category || "";
     $("p-category").value = p && p.category || "";
     $("prod-form-title").textContent = p ? "Edit " + p.name : "Add a product";
     $("p-name").value = p ? p.name : ""; $("p-price").value = p && p.price !== "" ? Number(p.price).toFixed(2) : "";
@@ -492,6 +493,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
     setPreview(p && p.photo); say("prod-msg", "");
     $("prod-form").hidden = false; $("p-name").focus();
   }
+  $("p-main-category").addEventListener("change", function() {
+    var options = $("product-category-options"); options.textContent = "";
+    ShopCategories.suggestions(this.value || shop.category).forEach(function(label) {
+      var option = document.createElement("option"); option.value = label; options.appendChild(option);
+    });
+  });
   $("prod-new").addEventListener("click", function(){ openProd(null); });
   $("prod-cancel").addEventListener("click", function(){ $("prod-form").hidden = true; });
   $("p-photo-pick").addEventListener("click", function(){ $("p-photo").click(); });
@@ -506,7 +513,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
     if (!name) { say("prod-msg", "Please give the product a name.", "bad"); $("p-name").focus(); return; }
     if (price && !/^\d{1,7}(\.\d{1,2})?$/.test(price)) { say("prod-msg", "Please enter the price as a number, like 25 or 12.50.", "bad"); return; }
     var b = $("prod-go"); busy(b, true, pPhoto ? "Uploading…" : "Saving…"); say("prod-msg", "");
-    api({ action: "product_save", category: $("p-category").value.trim(), comparison: Object.fromEntries(["brand", "model", "specification", "quantity", "unit", "branch", "delivery_zone", "delivery", "promotion_until"].map(function(k){ return [k,$("cmp-"+k).value.trim()]; })), token: token, id: editing ? editing.id : "", name: name, price: price, description: $("p-desc").value.trim(),
+    api({ action: "product_save", main_category: $("p-main-category").value, category: $("p-category").value.trim(), comparison: Object.fromEntries(["brand", "model", "specification", "quantity", "unit", "branch", "delivery_zone", "delivery", "promotion_until"].map(function(k){ return [k,$("cmp-"+k).value.trim()]; })), token: token, id: editing ? editing.id : "", name: name, price: price, description: $("p-desc").value.trim(),
       available: $("p-avail").checked, photo: pPhoto || "", remove_photo: pRemove }).then(function(res){
       busy(b, false, "Save product");
       if (!res.ok) { say("prod-msg", res.error, "bad"); return; }
