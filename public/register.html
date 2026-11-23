@@ -416,6 +416,8 @@ footer a{color:inherit !important}
           <button type="button" class="btn btn-ghost" id="copy">Copy details</button>
         </div>
         <p class="note" id="mail-note">If neither app opens, copy the details and send them on WhatsApp to <strong>+679 921 1153</strong> or by email to <strong>business-hub-fiji@risingsunfj.com</strong>.</p>
+        <p id="dashboard-row" hidden><a class="btn btn-accent" id="dashboard-link" href="/dashboard" target="_top">Open my shop dashboard</a></p>
+        <p id="mall-row" hidden><a class="btn btn-accent" href="/" target="_top">Explore the mall</a></p>
         <div class="summary" id="summary"></div>
         <button type="button" class="btn btn-ghost" id="again" style="justify-self:start">Start a new registration</button>
       </div>
@@ -600,6 +602,9 @@ footer a{color:inherit !important}
   var pendingSubmission = null;
 
   function showDone(data, posted){
+    $("dashboard-row").hidden = !(posted && data.joining_as === "Business");
+    $("mall-row").hidden = !(posted && data.joining_as !== "Business");
+    $("dashboard-link").href = "/dashboard?ref=" + encodeURIComponent(data.reference);
     lastText = toText(data);
     $("ref").textContent = data.reference;
     $("summary").textContent = lastText;
@@ -609,8 +614,8 @@ footer a{color:inherit !important}
     if (posted) {
       $("done-title").textContent = "Registration saved";
       $("done-msg").textContent = data.joining_as === "Business"
-        ? "Your business is awaiting review and is not public yet. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery. Visit /dashboard and use this reference to request a login code at your business email."
-        : "Your registration is saved. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery.";
+        ? "Your business is awaiting review and is not public yet. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery. Use the dashboard button below to request a login code at your business email."
+        : "Your registration is saved. Explore the mall below to discover shops, browse products and compare prices. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery.";
       $("send-row").hidden = true; $("mail-note").hidden = true;
     } else {
       $("done-title").textContent = "Almost done";
