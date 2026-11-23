@@ -254,6 +254,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
 </nav>
 
 <script src="/shop-categories.js"></script>
+<script src="/product-actions.js"></script>
 <script>
 (function(){
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
@@ -468,8 +469,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
       del.addEventListener("click", function(){
         if (!confirm("Delete " + p.name + "? This can't be undone.")) return;
         del.disabled = true;
-        api({ action: "product_delete", token: token, id: p.id }).then(function(res){
-          if (!res.ok) { del.disabled = false; alert(res.error); return; }
+        BHFProductActions.remove(api, token, p.id).then(function(res){
+          if (!res.ok) { if (res.products) { products = res.products; renderProducts(); } else { del.disabled = !!res.uncertain; } alert(res.error); return; }
           products = res.products; renderProducts();
         });
       });
