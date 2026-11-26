@@ -270,7 +270,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   function api(body){
     return fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) })
       .then(function(r){ return r.json(); })
-      .catch(function(){ return { ok: false, error: "Could not reach Business Hub. Check your connection and try again." }; })
+      .catch(function(){ return { ok: false, uncertain: true, error: "Could not reach Business Hub. Check your connection and try again." }; })
       .then(function(res){
         if (res && res.expired) { logout(); say("ref-msg", "Your login has expired. Please log in again.", "bad"); }
         return res || { ok: false, error: "Something went wrong." };
@@ -480,6 +480,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   }
   function setPreview(src){ var pv = $("p-preview"); if (src) { pv.src = src; pv.hidden = false; $("p-photo-clear").hidden = false; } else { pv.removeAttribute("src"); pv.hidden = true; $("p-photo-clear").hidden = true; } }
   function openProd(p){
+    if ($("prod-go").disabled) return;
+    busy($("prod-go"), false, "Save product");
     editing = p || null; pPhoto = null; pRemove = false;
     var options = $("product-category-options"); options.textContent = "";
     ShopCategories.suggestions(p && p.main_category || shop.category).forEach(function(label) {
@@ -513,11 +515,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
     var name = $("p-name").value.trim(), price = $("p-price").value.replace(/[$,\s]/g, "");
     if (!name) { say("prod-msg", "Please give the product a name.", "bad"); $("p-name").focus(); return; }
     if (price && !/^\d{1,7}(\.\d{1,2})?$/.test(price)) { say("prod-msg", "Please enter the price as a number, like 25 or 12.50.", "bad"); return; }
-    var b = $("prod-go"); busy(b, true, pPhoto ? "Uploading…" : "Saving…"); say("prod-msg", "");
-    api({ action: "product_save", main_category: $("p-main-category").value, category: $("p-category").value.trim(), comparison: Object.fromEntries(["brand", "model", "specification", "quantity", "unit", "branch", "delivery_zone", "delivery", "promotion_until"].map(function(k){ return [k,$("cmp-"+k).value.trim()]; })), token: token, id: editing ? editing.id : "", name: name, price: price, description: $("p-desc").value.trim(),
+    var b = $("prod-go"); if (b.disabled) return; busy(b, true, pPhoto ? "Uploading…" : "Saving…"); say("prod-msg", "");
+    $("prod-form").querySelectorAll("input,select,textarea,button").forEach(function(control){ control.disabled = true; });
+    $("prod-new").disabled = true;
+    BHFProductActions.save(api, { action: "product_save", main_category: $("p-main-category").value, category: $("p-category").value.trim(), comparison: Object.fromEntries(["brand", "model", "specification", "quantity", "unit", "branch", "delivery_zone", "delivery", "promotion_until"].map(function(k){ return [k,$("cmp-"+k).value.trim()]; })), token: token, id: editing ? editing.id : "", name: name, price: price, description: $("p-desc").value.trim(),
       available: $("p-avail").checked, photo: pPhoto || "", remove_photo: pRemove }).then(function(res){
+      $("prod-form").querySelectorAll("input,select,textarea,button").forEach(function(control){ control.disabled = false; });
+      $("prod-new").disabled = false;
       busy(b, false, "Save product");
-      if (!res.ok) { say("prod-msg", res.error, "bad"); return; }
+      if (!res.ok) { if (res.uncertain) busy(b, true, "Refresh to confirm save"); say("prod-msg", res.error, "bad"); return; }
       products = res.products; renderProducts(); $("prod-form").hidden = true;
     });
   });
