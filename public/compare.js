@@ -65,7 +65,7 @@
           var expired = c.promotion_until && c.promotion_until < new Date().toISOString().slice(0,10);
           card.appendChild(el("p", "Updated: " + (p.updated || "Unknown") + (stale ? " · Reconfirm old price" : "") + (expired ? " · Promotion expired; reconfirm price" : "")));
           card.appendChild(el("p", "Delivered total: " + (t.delivered == null ? "Quote required" : money(t.delivered)+" to "+c.delivery_zone)));
-          if (/^[a-z0-9-]+$/.test(o.slug)) { var a = el("a", "Visit shop"); a.href="/shop/"+o.slug; card.appendChild(a); }
+          if (/^[a-z0-9-]+$/.test(o.slug)) { var a = el("a", "Visit shop"); a.href="/shop/"+o.slug; card.appendChild(a); var booking=typeof ShopCategories!=="undefined"&&ShopCategories.booking(o.category);if(booking){var requestLink=el("a",booking.label);requestLink.href="/booking.html?shop="+encodeURIComponent(o.slug)+"&product="+encodeURIComponent(p.id);card.appendChild(requestLink);} }
         });
         section.appendChild(card);
       });
