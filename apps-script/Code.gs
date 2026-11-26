@@ -55,9 +55,7 @@ var PAY_STATUSES = ['Requested', 'Paid', 'Free trial approved', 'Cancelled'];
 
 // Business dashboard, shop pages and products
 var SITE = 'https://business-hub-fiji.vercel.app';
-var CATEGORY_LIST = ['Fish & food', 'Supermarket & grocery', 'Restaurant & takeaway',
-  'Hardware & building', 'Land development & civil works', 'Land surveying', 'Land consultancy',
-  'Car rental', 'Carwash', 'Transport & delivery', 'Clothing & retail', 'Other services'];
+var CATEGORY_LIST = ["Fish & food","Supermarket & grocery","Restaurant & takeaway","Hardware & building","Land development & civil works","Land surveying","Land consultancy","Equipment hire","Furniture & homeware","Clothing & retail","Hotels & resorts","Guesthouses & holiday rentals","Tours & activities","Car rental","Carwash","Transport & delivery","Mechanics & auto repairs","Salon, barber & spa","Venues & event services","Trades, repairs & cleaning","Dentists & dental clinics","Other services"];
 var PRODUCTS_SHEET = 'Products';
 var PRODUCTS_HEAD = ['Product ID', 'Shop ref', 'Name', 'Price (FJD)', 'Description', 'Photo', 'Available', 'Updated'];
 var PHOTO_FOLDER = 'Business Hub Fiji shop photos';
@@ -211,7 +209,7 @@ function save_(raw) {
   if (isBiz) {
     if (!d.business_name) return { ok: false, error: 'Please enter your business name.' };
     if (d.reg_no.replace(/[^A-Za-z0-9]/g, '').length < 4) return { ok: false, error: 'Please enter your business registration number or TIN.' };
-    if (!d.category) return { ok: false, error: 'Please choose a category.' };
+    if (CATEGORY_LIST.indexOf(d.category) < 0) return { ok: false, error: 'Please choose a category.' };
     if (d.listing_consent !== 'Yes') return { ok: false, error: 'Please agree to show your business in the mall.' };
   } else {
     ['business_name', 'reg_no', 'category', 'offers', 'google_maps', 'payments', 'commission_understood', 'listing_consent']

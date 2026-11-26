@@ -1,35 +1,28 @@
-# Business Hub Fiji release review — 24 November 2026 (Fiji)
+# Business Hub Fiji release review — 27 November 2026 (Fiji)
 
-Decision: HOLD. Do not merge recruitment/release changes yet. The owner approved merging only after restructuring, retesting and security checks. That condition is not satisfied. No payment or outbound contact has been made by this review.
+## Authorised scope
+The owner explicitly authorised releasing the reviewed storefront update on 27 November. This release includes the 22-category catalogue, booking and business supplier enquiry forms, PR12 pending-request locking, and PR14 uncertain product-save reconciliation.
 
-## Scope and evidence
+This is a public storefront and manual-enquiry release. It does not activate automatic payments, split commissions, automatic reservations, Google Places billing or Gemini. Booking and supplier requests require customer review/send through WhatsApp and supplier confirmation. No payment-security certification or fully secure-system guarantee is made.
 
-Reviewed GitHub main ad01cdacf58bf98a0ad939046a4c9ca335068c46 and recruitment branch 127e61675df9ecaca0c9138eedfab65b77ab7764, plus the hardening changes in this review. Read Vercel project configuration and environment-variable metadata without decrypting secrets. Vercel lists zero configured project environment variables, so recruitment dependencies are not connected. Existing registration uses its separate Apps Script properties and is not implied missing.
+## Evidence
+- 42 registered tests passed together after combining the changes.
+- Next.js production build passed; production dependency audit reported 0 known vulnerabilities.
+- Category parity tests cover registration, dashboard, Mall, filters and backend source, preserving existing labels.
+- Rendered form tests cover stays, same-day rentals, appointments, dentist/mechanic templates, sole-trader registration, business purchase/hire enquiries, date/quantity validation, consent, stale draft clearing and recovery from unsupported services.
+- Slow/error request tests cover recruitment locking and product-save reconciliation without replaying uncertain writes.
+- Owner's live checks: replacement Resend key delivered a login code; old exposed key deleted; recruitment record and draft survived refresh, copied correctly and locked; temporary product deletion retained the three originals; all three service-category placements checked and spelling retained.
+- Only CATEGORY_LIST was changed in the independently maintained Google source. Exact before/after comparison confirmed no other source differences. Owner's screenshot confirmed existing web-app deployment updated to Version 12 on 27 November, retaining its URL.
 
-Read-only HTTP checks: /, /register, /dashboard, /manage, /plans and /shop/true-boundary-consultant return 200. This proves page availability, not authenticated workflows. Existing production responses lack X-Frame-Options, X-Content-Type-Options and CSP. Live unauthenticated ops_get and shop_get with an invalid token return expired:true and no state/shop/products. No live records were mutated.
+## Security and privacy limits
+No new private backend endpoint is added for booking enquiries. Public shop data chooses the supplier phone; the customer cannot supply an alternate destination through URL parameters. Personal enquiry fields are not persisted by the form or included in the app page URL. Opening WhatsApp transfers the reviewed message text to WhatsApp. Business references are self-reported identifiers, not proof of identity or private-account access.
 
-Current independently edited Apps Script source is not available through the GitHub or Vercel connectors. The repository's Code.gs still contains the older MailApp login, while the live project was manually changed to Resend and comparison helpers. A complete export/version reconciliation is required; never replace the live Code.gs from this repository blindly.
+Existing authentication, photo handling, Apps Script service configuration and operator-token design remain. Browser protections include no framing, nosniff and a CSP baseline; this is not a complete strict-script XSS policy. Known-package auditing is not a penetration test.
 
-## Prepared changes (not live)
+## Separate follow-up work
+Before automated paid transactions: validate payment recipients, settlement, commission calculations, idempotency, refunds, accounting and provider acceptance. Before stronger security claims: reconcile/review the whole independently edited live backend, OTP/rate limits, ownership boundaries, backups/restores and administrator MFA. Google Places and Gemini setup need separate credentials/cost decisions.
 
-- Next.js 15.5.9 -> 15.5.29, plus exact patched PostCSS 8.5.23 and Sharp 0.35.5 overrides; no major framework migration. Initial production dependency audit: one critical and two high package findings. Audit after changes: zero reported production vulnerabilities. Registry audit is evidence about known packages, not a security guarantee.
-- Browser headers: nosniff, DENY framing, strict-origin-when-cross-origin referrers, disabled unused device permissions, base-uri self/object-src none/frame-ancestors none; remove X-Powered-By. CSP deliberately does not restrict inline scripts yet, because existing static pages depend on them. This is not a complete XSS policy.
-- Product deletion reconciles an uncertain response using authenticated shop_get, never automatically repeats the delete, and blocks immediate retry when outcome cannot be confirmed. It does not fix or identify the original backend/transport cause. Real authenticated live deletion remains pending.
-- GitHub Actions checks install, registered tests, production dependency audit and build. Existing scratch tests for unmerged login-provider work are not the canonical main branch suite and are not included. Canonical authentication tests must follow live-source reconciliation.
+## Deployment and rollback
+Deploy this reviewed combined commit through the existing main-branch Vercel project. Verify the exact production SHA, public page/category/booking assets and unauthenticated private API rejection after deployment. Retain the previous production deployment for rollback. The Google Version 12 category expansion is backward-compatible with existing labels and does not require reverting for a frontend rollback.
 
-## Checks passed
-
-22 registered tests: business desk UI demo, business-rule validation, server-derived pricing, stock rollback, idempotent requests, quote conversion, payments/overpay rejection, void rules, cross-shop isolation in mocked backend, storage limits, recruitment validation/deduplication/concurrent edits, deletion reconciliation and header/script checks. Production build passes Next.js 15.5.29. Credential-pattern scan in inspected app/public/backend source found no matching OpenAI/Google/Resend/GitHub key patterns (not a complete git-history secret audit).
-
-## Launch blockers and required acceptance evidence
-
-1. LIVE BACKEND SOURCE: obtain the current Apps Script export and deployment version. Review registration ownership/reference uniqueness, OTP randomness, concurrent attempt limits, one-time verification, logout/session expiry, quotas, error handling and product/photo write locking. Repository code accepts caller-supplied well-formed registration references, uses Math.random for codes, lacks a script lock around OTP verification and product deletion, and reads product rows before taking its save lock. These are source findings; applicability to the independently edited live version must be verified. Registration should generate authoritative unique references and separate legal-registry checks from user-supplied numbers.
-2. LIVE AUTHENTICATED TESTS: verify both business accounts cannot read/mutate one another, expired/revoked sessions fail, no public private-data leakage, valid email delivery and registration, save/edit/delete persists after reload, trial dates/category routing agree. Obtain test fixtures/owner access without putting passwords or API keys into chat.
-3. RECRUITMENT ACTIVATION: configure isolated private Sheets/Apps Script storage, operator access, Google Places, optional OpenAI; verify persisted reads/writes, search attribution/privacy requirements and drafts with actual service responses. Shared operator key is an initial single-operator mechanism; strengthen identity/audit logging and durable request/spend limits before broad access or unattended paid automation. No automatic outreach or scheduled reminders are installed.
-4. MONEY ACCEPTANCE: the platform currently records manual payments; subscription plan requests display a static QR and an operator marks the spreadsheet Paid. It does not confirm settlement via bank/provider webhooks, deduct commission automatically, process refunds, or implement a payment ledger. Verify QR recipient with the owner's account, reconciliation against a real provider statement, wrong/duplicate/failed transfer handling, refunds and access to payment administration before presenting this as automated payments. Do not mark a payment settled merely from a customer message or screenshot. No money-transfer test was performed.
-5. PAYMENT APPLY ATOMICITY: repository applyPayment_ has no write lock around subscription extension and its applied marker. Concurrent edits or partial failures can extend/reapply a payment. Reconcile live source, then introduce durable idempotency and an auditable payment ledger before automated activation.
-6. PRIVACY/RECOVERY/OPERATIONS: confirm sheet/Drive sharing, owner/admin account MFA, least privilege, backups and a tested restore, quotas/error monitoring, retention/privacy terms and actual trial cancellation rules. No access to Google account security or payment provider administration was exercised, so these remain unverified.
-
-## Release gate
-
-Keep PR11 draft. Once the blockers are resolved, rerun canonical tests/build/dependency audit and real authenticated acceptance tests on an isolated preview, then merge the reviewed exact head under the owner's existing conditional approval. Confirm production deployment and repeat smoke checks. Do not infer production readiness from a Vercel READY status alone. No system can be guaranteed fully secure, and this is an engineering review rather than a penetration-test or payment-provider certification.
+Hosted and production verification results are recorded in the PR/release report; do not infer live behaviour from READY status alone.

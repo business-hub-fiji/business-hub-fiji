@@ -219,6 +219,8 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
       sticky.appendChild(link("WhatsApp", "https://wa.me/" + wa + "?text=" + encodeURIComponent(hello), "s-wa", "Shop page WhatsApp"));
       sticky.appendChild(link("Call", "tel:+" + wa, "s-call", "Shop page Call"));
     }
+    var booking = ShopCategories.booking(s.category);
+    if (wa && booking) acts.appendChild(link(booking.label, "/booking.html?shop="+encodeURIComponent(s.slug), "btn btn-wa"));
     if (s.maps) acts.appendChild(link("Directions", s.maps, "btn btn-ghost", "Shop page Map"));
     sticky.appendChild(link("Mall", "/", "s-mall"));
 
@@ -252,6 +254,8 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
         if (p.description) b.appendChild(el("p", "d", p.description));
         card.appendChild(b);
         if (wa) card.appendChild(link("Ask on WhatsApp", "https://wa.me/" + wa + "?text=" + encodeURIComponent("Bula " + s.name + ", I saw \"" + p.name + "\" on your Business Hub Fiji shop. Is it available?"), "btn btn-wa btn-small", "Shop page product"));
+        var productBooking = ShopCategories.booking(p.main_category || s.category);
+        if (wa && productBooking) card.appendChild(link(productBooking.label,"/booking.html?shop="+encodeURIComponent(s.slug)+"&product="+encodeURIComponent(p.id),"btn btn-wa btn-small"));
         grid.appendChild(card);
         });
       });
