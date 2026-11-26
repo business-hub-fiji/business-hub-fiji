@@ -148,3 +148,23 @@ test('sole trader can choose an industry and is recorded privately without chang
  assert.equal(context.result.notes,'Private registration note');assert.equal(context.result.business_name,undefined);
  dom.window.close();
 });
+
+test('unsupported general enquiry clears the draft and permits returning to a bookable product',async()=>{
+ const {dom,w}=await page({ok:true,shop:{...business,category:'Other services'},products:[{id:'room',name:'Family room',main_category:'Hotels & resorts',available:true}]},'?shop=test-shop&product=room');
+ try{
+ const $=id=>w.document.getElementById(id);
+ const day=new Date(Date.now()+2*86400000);
+ for(const [id,value] of Object.entries({customer:'Test',contact:'test@example.test',start:booking.fijiNow(day).date,end:booking.fijiNow(new Date(day.getTime()+86400000)).date}))$(id).value=value;
+ $('consent').checked=true;$('request-form').dispatchEvent(new w.Event('submit',{cancelable:true}));
+ assert.equal($('draft-section').hidden,false);
+ $('service-choice').value='';$('service-choice').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('request-form').hidden,false);assert.equal($('prepare-request').disabled,true);
+ assert.equal($('draft-section').hidden,true);assert.equal($('send').hasAttribute('href'),false);
+ $('service').value='Cannot reuse old room mode';$('request-form').dispatchEvent(new w.Event('submit',{cancelable:true}));
+ assert.equal($('send').hasAttribute('href'),false);
+ $('service-choice').value='room';$('service-choice').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('prepare-request').disabled,false);assert.equal($('service').value,'Family room');
+ $('request-form').dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal($('draft-section').hidden,false);
+ $('contact').dispatchEvent(new w.Event('change',{bubbles:true}));assert.equal($('send').hasAttribute('href'),false);
+ }finally{dom.window.close();}
+});
