@@ -4,6 +4,7 @@ var $=function(id){return document.getElementById(id);}, query=new URLSearchPara
 function status(message){$('status').textContent=message;}
 function resetDraft(){$('draft-section').hidden=true;$('send').removeAttribute('href');$('draft').value='';}
 function configure(category,resetType){var booking=ShopCategories.booking(category);if(!booking)throw Error('Booking requests are not available for this service. Contact the business through its shop page.');selectedCategory=category;
+$('notes').placeholder=category==='Dentists & dental clinics'?'Appointment type only. Do not enter symptoms, medical history, identification documents or payment details.':'For delivery or a site visit, describe the area. Avoid sensitive personal or payment details.';
 var equipment=['Hardware & building','Furniture & homeware','Equipment hire','Car rental'].includes(category);
 $('procurement-wrap').hidden=!equipment;$('procurement').disabled=!equipment;
 if(equipment&&resetType)$('procurement').value=booking.mode==='rental'?'hire':'purchase';

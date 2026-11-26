@@ -270,11 +270,14 @@ footer a{color:inherit !important}
               </div>
               <div class="field">
                 <label for="category">Category <span class="req">*</span></label>
-                <select id="category" name="category"><option value="">Choose one</option><optgroup label="Food &amp; Grocery"><option>Fish &amp; food</option><option>Supermarket &amp; grocery</option><option>Restaurant &amp; takeaway</option></optgroup><optgroup label="Building &amp; Land"><option>Hardware &amp; building</option><option>Land development &amp; civil works</option><option>Land surveying</option><option>Land consultancy</option><option>Equipment hire</option></optgroup><optgroup label="Shopping &amp; Retail"><option>Furniture &amp; homeware</option><option>Clothing &amp; retail</option></optgroup><optgroup label="Accommodation &amp; Experiences"><option>Hotels &amp; resorts</option><option>Guesthouses &amp; holiday rentals</option><option>Tours &amp; activities</option></optgroup><optgroup label="Vehicles &amp; Transport"><option>Car rental</option><option>Carwash</option><option>Transport &amp; delivery</option></optgroup><optgroup label="Appointments &amp; Events"><option>Salon, barber &amp; spa</option><option>Venues &amp; event services</option><option>Trades, repairs &amp; cleaning</option></optgroup><optgroup label="Services"><option>Other services</option></optgroup></select>
+                <select id="category" name="category"><option value="">Choose one</option><optgroup label="Food &amp; Grocery"><option>Fish &amp; food</option><option>Supermarket &amp; grocery</option><option>Restaurant &amp; takeaway</option></optgroup><optgroup label="Building &amp; Land"><option>Hardware &amp; building</option><option>Land development &amp; civil works</option><option>Land surveying</option><option>Land consultancy</option><option>Equipment hire</option></optgroup><optgroup label="Shopping &amp; Retail"><option>Furniture &amp; homeware</option><option>Clothing &amp; retail</option></optgroup><optgroup label="Accommodation &amp; Experiences"><option>Hotels &amp; resorts</option><option>Guesthouses &amp; holiday rentals</option><option>Tours &amp; activities</option></optgroup><optgroup label="Vehicles &amp; Transport"><option>Car rental</option><option>Carwash</option><option>Transport &amp; delivery</option><option>Mechanics &amp; auto repairs</option></optgroup><optgroup label="Appointments &amp; Events"><option>Salon, barber &amp; spa</option><option>Venues &amp; event services</option><option>Trades, repairs &amp; cleaning</option><option>Dentists &amp; dental clinics</option></optgroup><optgroup label="Services"><option>Other services</option></optgroup></select>
                 <span class="err" id="category-err"></span>
               </div>
             </div>
             <div class="field">
+              <label for="structure">Business structure (optional)</label>
+              <select id="structure" name="structure"><option value="">Prefer not to specify</option><option>Sole trader</option><option>Company</option><option>Partnership</option><option>Trust or cooperative</option><option>Other</option></select>
+              <span class="hint">Choose your industry category separately. This self-reported detail is saved privately with your registration notes.</span>
               <label for="regno">Business registration number or TIN <span class="req">*</span></label>
               <input type="text" id="regno" name="regno" autocomplete="off" spellcheck="false" placeholder="e.g. BN 2024/123 or your TIN">
               <span class="hint">Your Registrar of Companies number, or your FRCS TIN if you're not registered there. We check it to keep fake shops out. It's never shown publicly.</span>
@@ -551,6 +554,7 @@ footer a{color:inherit !important}
     };
     if (isBiz) {
       data.business_name = val("bizname");
+      if (val("structure")) data.notes = "Business structure (self-reported): " + val("structure") + "\n" + data.notes;
       data.reg_no = val("regno");
       data.listing_consent = $("listing").checked ? "Yes" : "No";
       data.category = val("category");

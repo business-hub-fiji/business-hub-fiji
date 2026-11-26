@@ -1,7 +1,7 @@
 # Expanded categories and booking enquiries
 
 ## Scope
-Twenty categories are aligned across registration, business dashboard product categories, Mall groups, offer filters, product/service suggestions and the Apps Script CATEGORY_LIST. Existing twelve category labels are preserved exactly. Eight additions: Furniture & homeware; Hotels & resorts; Guesthouses & holiday rentals; Tours & activities; Salon, barber & spa; Venues & event services; Trades, repairs & cleaning; Equipment hire.
+Twenty-two categories are aligned across registration, business dashboard product categories, Mall groups, offer filters, product/service suggestions and the Apps Script CATEGORY_LIST. Existing twelve category labels are preserved exactly. Ten additions: Furniture & homeware; Hotels & resorts; Guesthouses & holiday rentals; Tours & activities; Salon, barber & spa; Venues & event services; Trades, repairs & cleaning; Equipment hire; Dentists & dental clinics; Mechanics & auto repairs.
 
 Eligible public shops and services link to /booking.html?shop=<slug> (optionally &product=<id>). Stays request check-in/out dates and rooms. Rentals request pickup/return dates and times, including same-day rentals. Other templates request a date/time and headcount. Times are Fiji time.
 
@@ -35,3 +35,8 @@ PR12 recruitment pending-edit protection, PR13 Gemini and PR14 save-confirmation
 Customers can choose Buying for my business and provide buyer business name plus an optional Business Hub reference. References are customer-provided identifiers, not authenticated proof of ownership. Equipment, hardware, furniture and vehicle templates allow purchase or hire enquiries; purchase requests collect quantity and a requested delivery/pickup date, while hire requests also require return date/time. Delivery requests require a location. These fields are included in the customer-reviewed WhatsApp draft to the supplier's existing public number.
 
 The supplier must issue a quotation, confirm availability, and agree terms with the buyer. This form creates no purchase order, invoice, shared order status, delivery tracking, payment or commission entry. No identities or references are used to grant private-account access. Private ordering and supplier acceptance records remain future work.
+
+## Dentists, mechanics and sole traders
+Dentists & dental clinics and Mechanics & auto repairs use date/time appointment enquiries. Dental requests ask only for appointment logistics and warn against symptoms, medical histories, identity documents or payment details; they are not medical consultations or emergency services.
+
+Sole trader is an optional business-structure selection, separate from industry. The selected structure is self-reported and prepended to existing private registration Notes so no new live spreadsheet column or public identity badge is required. Existing registration checks and category assignment are unchanged. This selector does not verify incorporation, tax status or professional credentials.

@@ -55,7 +55,7 @@ var PAY_STATUSES = ['Requested', 'Paid', 'Free trial approved', 'Cancelled'];
 
 // Business dashboard, shop pages and products
 var SITE = 'https://business-hub-fiji.vercel.app';
-var CATEGORY_LIST = ["Fish & food","Supermarket & grocery","Restaurant & takeaway","Hardware & building","Land development & civil works","Land surveying","Land consultancy","Equipment hire","Furniture & homeware","Clothing & retail","Hotels & resorts","Guesthouses & holiday rentals","Tours & activities","Car rental","Carwash","Transport & delivery","Salon, barber & spa","Venues & event services","Trades, repairs & cleaning","Other services"];
+var CATEGORY_LIST = ["Fish & food","Supermarket & grocery","Restaurant & takeaway","Hardware & building","Land development & civil works","Land surveying","Land consultancy","Equipment hire","Furniture & homeware","Clothing & retail","Hotels & resorts","Guesthouses & holiday rentals","Tours & activities","Car rental","Carwash","Transport & delivery","Mechanics & auto repairs","Salon, barber & spa","Venues & event services","Trades, repairs & cleaning","Dentists & dental clinics","Other services"];
 var PRODUCTS_SHEET = 'Products';
 var PRODUCTS_HEAD = ['Product ID', 'Shop ref', 'Name', 'Price (FJD)', 'Description', 'Photo', 'Available', 'Updated'];
 var PHOTO_FOLDER = 'Business Hub Fiji shop photos';

@@ -7,8 +7,8 @@ const booking=require('../public/booking-request.js');
 const now=new Date('2026-11-26T14:00:00Z'); // 27 November, 02:00 in Fiji.
 const business={name:'Example Test Business',phone:'+679 9999999'};
 const base={name:'Test Customer',contact:'customer@example.test',service:'Test service',start:'2026-11-28',end:'2026-11-29',time:'09:00',endTime:'10:00',people:'2',units:'1',notes:'Test only',consent:true};
-test('twenty categories match registration, product editing, offer filters and backend',()=>{
- const categories=catalog.categories;assert.equal(categories.length,20);assert.equal(new Set(categories).size,20);
+test('twenty-two categories match registration, product editing, offer filters and backend',()=>{
+ const categories=catalog.categories;assert.equal(categories.length,22);assert.equal(new Set(categories).size,22);
  for(const name of ['Fish & food','Supermarket & grocery','Restaurant & takeaway','Hardware & building','Land development & civil works','Land surveying','Land consultancy','Car rental','Carwash','Transport & delivery','Clothing & retail','Other services'])assert.ok(categories.includes(name),name);
  for(const [path,id] of [['public/register.html','category'],['public/dashboard.html','p-main-category'],['public/market.html','offer-category']]){
   const dom=new JSDOM(fs.readFileSync(path,'utf8'));const labels=[...dom.window.document.getElementById(id).options].filter(o=>o.value).map(o=>o.value);
@@ -120,4 +120,31 @@ test('rendered business equipment request toggles purchase and hire, validates d
  $('buyer-type').value='personal';$('buyer-type').dispatchEvent(new w.Event('change',{bubbles:true}));
  assert.equal($('buyer-business').disabled,true);assert.equal($('buyer-business').required,false);
  }finally{dom.window.close();}
+});
+
+test('dentists and mechanics have appointment templates rather than a retail purchase flow',async()=>{
+ for(const category of ['Dentists & dental clinics','Mechanics & auto repairs']){
+ const {dom,w}=await page({ok:true,shop:{...business,category},products:[]});
+ assert.equal(w.document.getElementById('request-form').hidden,false);
+ assert.equal(w.document.getElementById('time').required,true);
+ assert.equal(w.document.getElementById('end').disabled,true);
+ assert.equal(w.document.getElementById('procurement').disabled,true);
+ if(category.startsWith('Dentists'))assert.match(w.document.getElementById('notes').placeholder,/Do not enter symptoms/);
+ dom.window.close();
+ }
+});
+test('sole trader can choose an industry and is recorded privately without changing consumer registration',()=>{
+ const html=fs.readFileSync('public/register.html','utf8'),dom=new JSDOM(html);
+ const selector=dom.window.document.getElementById('structure');
+ assert.ok([...selector.options].some(x=>x.value==='Sole trader'));
+ assert.ok(dom.window.document.getElementById('category').querySelector('option').parentElement!==selector);
+ const fn=html.match(/function collect\(ref\)\{[\s\S]*?return data;\s*\}/)[0];
+ const values={structure:'Sole trader',notes:'Private registration note',bizname:'Example sole trader',regno:'TEST123',category:'Mechanics & auto repairs'};
+ const context={role:()=> 'Business',via:()=> 'Email',val:k=>values[k]||'',form:{querySelectorAll:()=>[]},$:()=>({checked:true})};
+ vm.runInNewContext(fn+';result=collect("BHF-261127-TEST");',context);
+ assert.match(context.result.notes,/Business structure \(self-reported\): Sole trader/);
+ assert.equal(context.result.category,'Mechanics & auto repairs');
+ context.role=()=> 'Customer';vm.runInNewContext('result=collect("BHF-261127-TEST");',context);
+ assert.equal(context.result.notes,'Private registration note');assert.equal(context.result.business_name,undefined);
+ dom.window.close();
 });
