@@ -30,3 +30,8 @@ The live Registrations Apps Script has edits not necessarily in GitHub (includin
 
 ## Separate pending changes
 PR12 recruitment pending-edit protection, PR13 Gemini and PR14 save-confirmation reconciliation remain separate. This PR starts from main and does not silently include those changes.
+
+## Business-to-business supplier enquiries
+Customers can choose Buying for my business and provide buyer business name plus an optional Business Hub reference. References are customer-provided identifiers, not authenticated proof of ownership. Equipment, hardware, furniture and vehicle templates allow purchase or hire enquiries; purchase requests collect quantity and a requested delivery/pickup date, while hire requests also require return date/time. Delivery requests require a location. These fields are included in the customer-reviewed WhatsApp draft to the supplier's existing public number.
+
+The supplier must issue a quotation, confirm availability, and agree terms with the buyer. This form creates no purchase order, invoice, shared order status, delivery tracking, payment or commission entry. No identities or references are used to grant private-account access. Private ordering and supplier acceptance records remain future work.

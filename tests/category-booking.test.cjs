@@ -83,3 +83,41 @@ test('selected public product chooses its own booking mode and unsafe scripts do
  const html=fs.readFileSync(path,'utf8');for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())new vm.Script(m[1],{filename:path});
  }
 });
+
+test('business purchase enquiry carries buyer, quantity and delivery without a false order',()=>{
+ const result=booking.build({...base,buyerType:'business',businessName:'Test Civil Works',businessReference:'BHF-261118-924B',fulfilment:'Delivery',location:'Naikabula, Lautoka',units:'40'},business,'purchase',now);
+ assert.match(result.message,/Purchase enquiry/);assert.match(result.message,/Buying for my business: Test Civil Works/);assert.match(result.message,/customer provided/);assert.match(result.message,/Items \/ vehicles: 40/);assert.match(result.message,/Naikabula, Lautoka/);assert.match(result.message,/not a confirmed reservation or purchase order/);assert.doesNotMatch(result.message,/Return:|Guests \/ participants/);
+ assert.equal(new URL(result.url).pathname,'/6799999999');
+});
+test('business hire enquiry includes pickup and return for a supplier quotation',()=>{
+ const result=booking.build({...base,buyerType:'business',businessName:'Example Builder',fulfilment:'Pickup',units:'2'},business,'rental',now);
+ assert.match(result.message,/Hire enquiry/);assert.match(result.message,/Return: 2026-11-29 at 10:00/);assert.match(result.message,/Items \/ vehicles: 2/);
+});
+test('buyer validation requires business name, checks optional reference and delivery location',()=>{
+ for(const data of [{businessName:''},{businessReference:'verified-admin'},{fulfilment:'Delivery',location:''},{units:'0'},{units:'1001'}]){
+ assert.throws(()=>booking.build({...base,buyerType:'business',businessName:'Test Business',...data},business,'purchase',now));
+ }
+ const personal=booking.build({...base,buyerType:'personal',businessName:'Do not include',businessReference:'BAD'},business,'purchase',now);
+ assert.doesNotMatch(personal.message,/Do not include|BAD/);
+ assert.throws(()=>booking.build({...base,buyerType:'admin'},business,'purchase',now));
+});
+test('rendered business equipment request toggles purchase and hire, validates delivery and clears stale drafts',async()=>{
+ const {dom,w,requests}=await page({ok:true,shop:{...business,category:'Equipment hire'},products:[]});
+ try{
+ const $=id=>w.document.getElementById(id);
+ $('buyer-type').value='business';$('buyer-type').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('buyer-business').required,true);assert.equal($('business-fields').hidden,false);
+ $('procurement').value='purchase';$('procurement').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('end').required,false);assert.equal($('units').max,'1000');assert.equal($('people').disabled,true);
+ const day=booking.fijiNow(new Date(Date.now()+2*86400000)).date;
+ for(const [id,value] of Object.entries({'buyer-business':'Test Buyer','buyer-reference':'BHF-261118-924B',service:'Excavator',customer:'Test Operator',contact:'test@example.test',start:day,time:'09:00',units:'5'}))$(id).value=value;
+ $('fulfilment').value='Delivery';$('fulfilment').dispatchEvent(new w.Event('change',{bubbles:true}));assert.equal($('location').required,true);$('consent').checked=true;
+ $('request-form').dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal($('draft-section').hidden,true);
+ $('location').value='Lautoka';$('request-form').dispatchEvent(new w.Event('submit',{cancelable:true}));
+ assert.equal($('draft-section').hidden,false);assert.match($('draft').value,/Buying for my business: Test Buyer/);assert.match($('draft').value,/Purchase enquiry/);assert.equal(requests.length,1);
+ $('procurement').value='hire';$('procurement').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('end').required,true);assert.equal($('end-time').required,true);assert.equal($('send').hasAttribute('href'),false);
+ $('buyer-type').value='personal';$('buyer-type').dispatchEvent(new w.Event('change',{bubbles:true}));
+ assert.equal($('buyer-business').disabled,true);assert.equal($('buyer-business').required,false);
+ }finally{dom.window.close();}
+});

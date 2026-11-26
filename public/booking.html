@@ -1,12 +1,15 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Request a booking · Business Hub Fiji</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Booking &amp; supplier enquiries · Business Hub Fiji</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#13243d;color:#222;font:17px/1.5 system-ui,sans-serif}main{max-width:850px;margin:32px auto;padding:28px;background:#fff9e9;border:5px double #ac8b60;border-radius:22px}h1{line-height:1.2}label{display:block;font-weight:600;margin:15px 0}input,select,textarea{display:block;width:100%;font:inherit;padding:12px;border:1px solid #867b6a;border-radius:9px;background:white}input[type=checkbox]{display:inline;width:auto;margin-right:8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}button,.button{display:inline-block;border:0;border-radius:26px;background:#14243c;color:white;padding:13px 20px;font:inherit;cursor:pointer;text-decoration:none}a{color:#174986}.notice{background:#f4e5b9;padding:15px;border-radius:12px}[hidden]{display:none!important}:focus-visible{outline:3px solid #ad7000;outline-offset:3px}@media(max-width:600px){main{margin:12px;padding:18px}}
 </style></head><body><main>
-<a id="back" href="/">Back to the Mall</a><h1 id="title">Request a booking</h1>
-<p class="notice">Send an enquiry to the business. Availability, price, deposits and cancellation terms must be confirmed by the business. This form does not reserve a slot or take payment.</p>
+<a id="back" href="/">Back to the Mall</a><h1 id="title">Booking &amp; supplier enquiries</h1>
+<p class="notice">Send an enquiry to the business. Availability, price, deposits and cancellation terms must be confirmed by the business. This form does not reserve a slot, place a purchase order or take payment.</p>
 <p id="status" role="status" aria-live="polite">Loading the business…</p>
 <form id="request-form" hidden>
+<label>Who is this request for?<select id="buyer-type"><option value="personal">Myself</option><option value="business">Buying for my business</option></select></label>
+<div id="business-fields" class="grid" hidden><label>Buyer business name<input id="buyer-business" maxlength="120" disabled></label><label>Business Hub shop reference (optional)<input id="buyer-reference" maxlength="20" placeholder="BHF-YYMMDD-XXXX" disabled></label></div>
+<label id="procurement-wrap" hidden>What do you need?<select id="procurement" disabled><option value="purchase">Purchase enquiry</option><option value="hire">Hire enquiry</option></select></label>
 <label>Service or package<select id="service-choice"><option value="">Describe my request</option></select></label>
 <label>What would you like to book?<input id="service" maxlength="120" required></label>
 <div class="grid"><label>Your name<input id="customer" maxlength="80" autocomplete="name" required></label><label>Phone or email for the business to reply<input id="contact" maxlength="120" required></label></div>
@@ -15,13 +18,14 @@
 <label id="time-wrap">Fiji time<input type="time" id="time" required></label>
 <label id="end-wrap" hidden><span id="end-label">End date</span><input type="date" id="end"></label>
 <label id="end-time-wrap" hidden>Return time (Fiji)<input type="time" id="end-time"></label>
-<label>Guests or participants<input type="number" id="people" min="1" max="100" step="1" value="1" required></label>
+<label id="people-wrap">Guests or participants<input type="number" id="people" min="1" max="100" step="1" value="1" required></label>
 <label id="units-wrap" hidden><span id="units-label">Rooms or units</span><input type="number" id="units" min="1" max="20" step="1" value="1"></label>
 </div>
+<div class="grid"><label>Delivery or pickup<select id="fulfilment"><option>Arrange with supplier</option><option>Delivery</option><option>Pickup</option><option>On site</option></select></label><label>Requested delivery or site location<input id="location" maxlength="200" placeholder="Required for delivery"></label></div>
 <label>Additional details (optional)<textarea id="notes" maxlength="500" rows="3" placeholder="For delivery or a site visit, describe the area. Avoid sensitive personal or payment details."></textarea></label>
 <label><input type="checkbox" id="consent" required>I want to share these details with this business through WhatsApp.</label>
 <p>Your details are not saved by this form. Preparing a draft does not send it. Opening WhatsApp shares the prepared text with WhatsApp; review it and press Send there when ready.</p>
-<button type="submit">Prepare booking request</button>
+<button type="submit">Prepare request</button>
 </form>
-<section id="draft-section" hidden><h2>Review your request</h2><textarea id="draft" rows="14" readonly aria-label="Booking request draft"></textarea><p><a id="send" class="button" target="_blank" rel="noopener noreferrer">Open WhatsApp to send request</a></p><p>No booking has been confirmed. Wait for the business’s reply.</p></section>
+<section id="draft-section" hidden><h2>Review your request</h2><textarea id="draft" rows="14" readonly aria-label="Booking request draft"></textarea><p><a id="send" class="button" target="_blank" rel="noopener noreferrer">Open WhatsApp to send request</a></p><p>No booking or purchase order has been confirmed. Wait for the business’s quotation and availability confirmation.</p></section>
 </main><script src="/shop-categories.js"></script><script src="/booking-request.js"></script><script src="/booking-page.js"></script></body></html>
