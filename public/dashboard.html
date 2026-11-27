@@ -94,9 +94,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
 @media (max-width:560px){.prod{grid-template-columns:56px 1fr}.prod .thumb{width:56px;height:56px}.prod .acts{grid-column:1/-1}}
 </style>
 <link rel="stylesheet" href="/site-background.css">
-<link rel="stylesheet" href="/product-studio.css"><script src="/registration-flow.js"></script></head>
+<link rel="stylesheet" href="/product-studio.css"><script src="/registration-flow.js"></script><link rel="stylesheet" href="/dashboard-background.css">
+<script defer src="/dashboard-background.js"></script>
+</head>
 <body>
-<header>
+<header class="dashboard-sunrise">
+  <img class="sunrise-layer sunrise-still" src="/dashboard-sunrise/sunrise-1.jpg" alt="" aria-hidden="true">
+  <img class="sunrise-layer sunrise-next" alt="" aria-hidden="true">
+  <button type="button" class="sunrise-control" hidden>Pause photos</button>
   <div class="wrap">
     <div class="bar">
       <a class="logo" href="/"><i class="bure" aria-hidden="true"></i><b>Business Hub</b><span>FIJI</span></a>
