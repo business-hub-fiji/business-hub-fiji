@@ -157,6 +157,7 @@ function setupExtras_(ss) {
 }
 
 function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'booking_capabilities') return json_(bookingCapabilities_());
   if (e && e.parameter && e.parameter.action === 'mall_offers') return json_(publicMallOffers_());
   var action = e && e.parameter && e.parameter.action;
   if (action === 'listings') return json_({ ok: true, listings: listings_() });
@@ -167,6 +168,7 @@ function doGet(e) {
 function doPost(e) {
   var data = {};
   try { data = JSON.parse(e.postData.contents); } catch (err) { data = (e && e.parameter) || {}; }
+  if (/^booking_/.test(data.action || '')) return json_(bookingDispatch_(data));
   if (/^ops_/.test(data.action || '')) return json_(operations_(data));
   if (data.action === 'click') return json_(click_(data));
   if (data.action === 'report') return json_(report_(data));

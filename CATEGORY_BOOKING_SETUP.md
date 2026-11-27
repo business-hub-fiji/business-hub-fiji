@@ -29,7 +29,7 @@ The live Registrations Apps Script has edits not necessarily in GitHub (includin
 - Business confirmation remains manual; no automatic charges or claims of real-time availability.
 
 ## Separate pending changes
-The final release candidate explicitly combines PR12 recruitment pending-edit protection and PR14 save-confirmation reconciliation. PR13 Gemini remains separate and inactive.
+PR12 recruitment pending-edit protection, PR13 Gemini and PR14 save-confirmation reconciliation remain separate. This PR starts from main and does not silently include those changes.
 
 ## Business-to-business supplier enquiries
 Customers can choose Buying for my business and provide buyer business name plus an optional Business Hub reference. References are customer-provided identifiers, not authenticated proof of ownership. Equipment, hardware, furniture and vehicle templates allow purchase or hire enquiries; purchase requests collect quantity and a requested delivery/pickup date, while hire requests also require return date/time. Delivery requests require a location. These fields are included in the customer-reviewed WhatsApp draft to the supplier's existing public number.
@@ -41,5 +41,6 @@ Dentists & dental clinics and Mechanics & auto repairs use date/time appointment
 
 Sole trader is an optional business-structure selection, separate from industry. The selected structure is self-reported and prepended to existing private registration Notes so no new live spreadsheet column or public identity badge is required. Existing registration checks and category assignment are unchanged. This selector does not verify incorporation, tax status or professional credentials.
 
-## Activation progress — 27 November 2026
-The category-only Google source update was saved and verified against the original source. The owner activated Version 12 of the existing Registrations web app. Frontend release was explicitly authorised; final deployment evidence is recorded in the release PR. Do not repeat backend edits or change script properties.
+## Booking dashboard update
+
+The public category form remains an enquiry. Owners can now record customer-requested bookings at `/bookings.html`, send an email verification invitation, confirm after verification and offer optional 24-hour and 2-hour email reminders. Overlap checks apply to confirmed bookings recorded for the same resource in Business Hub, not external calendars. See BOOKING_AUTOMATION.md.
