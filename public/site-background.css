@@ -67,3 +67,6 @@ body>main:not(.wrap),.biz,.compare-box{
 body>main:not(.wrap)>section{background-color:rgba(255,248,232,.95)}
 header .intro,header .wrap{background-image:none!important;background-color:transparent!important}
 @media(max-width:600px){main>section:not(.hero),main>.wrap,.layout,.privacy{background-size:72px 72px!important}}
+
+/* Bure symbol beside the Business Hub wordmark; takes the header's text colour. */
+.logo .bure{display:inline-block;align-self:center;flex:none;width:1.34em;height:1.7em;background:currentColor;-webkit-mask:url('/brand/bure.svg') center/contain no-repeat;mask:url('/brand/bure.svg') center/contain no-repeat}
