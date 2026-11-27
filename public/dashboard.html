@@ -94,7 +94,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
 @media (max-width:560px){.prod{grid-template-columns:56px 1fr}.prod .thumb{width:56px;height:56px}.prod .acts{grid-column:1/-1}}
 </style>
 <link rel="stylesheet" href="/site-background.css">
-</head>
+<link rel="stylesheet" href="/product-studio.css"><script src="/registration-flow.js"></script></head>
 <body>
 <header>
   <div class="wrap">
@@ -282,7 +282,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   var refInput = $("ref");
   refInput.value = ref;
   var qp = new URLSearchParams(location.search).get("ref");
-  if (qp) refInput.value = qp.toUpperCase();
+  if (qp && /^BHF-\d{6}-[A-Z0-9]{4}$/.test(qp.toUpperCase())) { refInput.value = qp.toUpperCase(); if (ref !== qp.toUpperCase()) { token = null; store("bhf_token", ""); ref = qp.toUpperCase(); store("bhf_ref", ref); } }
 
   $("step-ref").addEventListener("submit", function(e){
     e.preventDefault();
@@ -330,7 +330,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
       $("title").textContent = shop.name;
       $("subtitle").textContent = "Shop reference " + shop.ref + ". Update your shop, add photos and list your products.";
       $("dash").hidden = false; $("logout").hidden = false;
-      renderStatus(); fillDetails(); renderPhotos(); renderProducts();
+      renderStatus(); fillDetails(); renderPhotos(); renderProducts(); document.dispatchEvent(new Event("bhf-shop-loaded"));
     });
   }
 
@@ -531,5 +531,5 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   if (token) openDash();
 })();
 </script>
-</body>
+<script src="/product-studio.js"></script><script src="/website-templates.js"></script><script src="/website-template-dashboard.js"></script><script>BHFRegistrationFlow.showReceipt();</script></body>
 </html>

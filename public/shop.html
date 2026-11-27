@@ -91,7 +91,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
 @media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}.hero .wrap{padding-top:40px}}
 </style>
 <link rel="stylesheet" href="/site-background.css">
-</head>
+<link rel="stylesheet" href="/shop-brochure.css"></head>
 <body>
 <div class="top">
   <div class="wrap">
@@ -148,7 +148,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
   <nav class="sticky" id="sticky" aria-label="Contact this shop"></nav>
 </div>
 
-<script src="/shop-categories.js"></script>
+<script src="/shop-categories.js"></script><script src="/website-templates.js"></script><script src="/shop-brochure.js"></script>
 <script>
 (function(){
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
@@ -195,6 +195,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
         link("Find " + s.name + " in the mall", "/?q=" + encodeURIComponent(s.name), "btn btn-wa"));
       return;
     }
+    BHFWebsiteTemplates.apply(s.category);
     var md = document.querySelector('meta[name="description"]');
     if (md) md.setAttribute("content", s.name + (s.offers ? ": " + s.offers : "") + (s.town ? " · " + s.town : "") + " · on Business Hub Fiji");
 
@@ -272,10 +273,10 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
     }
 
     $("report").addEventListener("click", function(){ location.href = "/?report=" + encodeURIComponent(s.name); });
-    $("loading").hidden = true; $("shop").hidden = false;
+    $("loading").hidden = true; $("shop").hidden = false; BHFBrochure.install(s);
   }
 })();
 </script>
-</body>
+<section id="shopify-directory" aria-label="Products from this seller’s Shopify store"></section><link rel="stylesheet" href="/shopify-directory.css"><script src="/shopify-directory.js"></script></body>
 </html>
 
