@@ -91,7 +91,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
 @media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}.hero .wrap{padding-top:40px}}
 </style>
 <link rel="stylesheet" href="/site-background.css">
-</head>
+<link rel="stylesheet" href="/shop-brochure.css"></head>
 <body>
 <div class="top">
   <div class="wrap">
@@ -148,7 +148,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
   <nav class="sticky" id="sticky" aria-label="Contact this shop"></nav>
 </div>
 
-<script src="/shop-categories.js"></script>
+<script src="/shop-categories.js"></script><script src="/shop-brochure.js"></script>
 <script>
 (function(){
   var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
@@ -272,7 +272,7 @@ footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
     }
 
     $("report").addEventListener("click", function(){ location.href = "/?report=" + encodeURIComponent(s.name); });
-    $("loading").hidden = true; $("shop").hidden = false;
+    $("loading").hidden = true; $("shop").hidden = false; BHFBrochure.install(s);
   }
 })();
 </script>
