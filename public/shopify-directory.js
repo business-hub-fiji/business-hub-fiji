@@ -12,7 +12,9 @@
  var status=document.createElement('p');status.setAttribute('role','status');status.textContent='Checking participating shops…';root.appendChild(status);
  var grid=document.createElement('div');grid.className='shopify-directory-grid';root.appendChild(grid);
  var policy=document.createElement('a');policy.href='/shopify-listing-policy.html';policy.textContent='Seller permissions, privacy and removal requests';root.appendChild(policy);
- var slug=location.pathname.indexOf('/shop/')===0?location.pathname.split('/').filter(Boolean).pop():null;
+ var shopPage=location.pathname==='/shop.html'||location.pathname.indexOf('/shop/')===0;
+ var slug=location.pathname.indexOf('/shop/')===0?location.pathname.split('/').filter(Boolean).pop():(shopPage?new URLSearchParams(location.search).get('s'):null);
+ if(shopPage&&!slug)slug='__missing_seller__';
  function clearLinks(){grid.textContent='';status.textContent='Product details have expired. Refresh to check current listings.';}
  function render(){
   grid.textContent='';var query=search.value.trim().toLowerCase();var found=offers.filter(function(o){return (!slug||o.slug===slug)&&(!allowed||allowed.indexOf(o.category)>=0)&&(!select.value||o.category===select.value)&&(o.title+' '+o.business).toLowerCase().includes(query);});
