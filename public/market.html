@@ -169,6 +169,7 @@ header{background:linear-gradient(90deg,rgba(9,24,42,.76),rgba(9,24,42,.32)),url
       <a class="logo" href="/" aria-label="Business Hub Fiji home"><b>Business Hub</b><span>FIJI</span></a>
       <nav class="topnav" aria-label="Main">
         <a href="/" aria-current="page">Mall</a>
+        <a href="#service-request">Request a service</a>
         <a href="/plans">Plans</a>
         <a href="/dashboard">My shop</a>
         <a href="/about">About</a>
@@ -222,6 +223,19 @@ header{background:linear-gradient(90deg,rgba(9,24,42,.76),rgba(9,24,42,.32)),url
       </div>
     </section>
   </div>
+<section class="compare-box" id="service-request" aria-labelledby="service-request-title">
+  <h2 id="service-request-title">Request a local service</h2>
+  <p>Find businesses in your area, then send your request to a provider to check availability and get a quote.</p>
+  <form id="service-search">
+    <p><label for="service-needed">What do you need?</label><br><input id="service-needed" name="service" maxlength="120" required placeholder="e.g. Grass cutting"></p>
+    <p><label for="service-town">Town or area</label><br><input id="service-town" name="town" maxlength="80" required placeholder="e.g. Lautoka"></p>
+    <button type="submit" class="btn btn-accent">Find local providers</button>
+  </form>
+  <p id="service-feedback" role="status"></p>
+  <p><a id="service-earth" hidden target="_blank" rel="noopener noreferrer">View area in Google Earth</a></p>
+  <ul id="service-results"></ul>
+</section>
+<script defer src="/service-request.js"></script>
 <section class="compare-box" aria-labelledby="compare-title"><h2 id="compare-title">Browse products & services</h2><p>Explore offerings across all business types. Filter by main category and subcategory. Only complete, matching specifications are compared; quote-only services remain separate.</p><label for="offer-category">Main category</label><select id="offer-category"><option value="">All categories</option><option value="Fish &amp; food">Fish &amp; food</option><option value="Supermarket &amp; grocery">Supermarket &amp; grocery</option><option value="Restaurant &amp; takeaway">Restaurant &amp; takeaway</option><option value="Hardware &amp; building">Hardware &amp; building</option><option value="Land development &amp; civil works">Land development &amp; civil works</option><option value="Land surveying">Land surveying</option><option value="Land consultancy">Land consultancy</option><option value="Equipment hire">Equipment hire</option><option value="Furniture &amp; homeware">Furniture &amp; homeware</option><option value="Clothing &amp; retail">Clothing &amp; retail</option><option value="Hotels &amp; resorts">Hotels &amp; resorts</option><option value="Guesthouses &amp; holiday rentals">Guesthouses &amp; holiday rentals</option><option value="Tours &amp; activities">Tours &amp; activities</option><option value="Car rental">Car rental</option><option value="Carwash">Carwash</option><option value="Transport &amp; delivery">Transport &amp; delivery</option><option value="Mechanics &amp; auto repairs">Mechanics &amp; auto repairs</option><option value="Salon, barber &amp; spa">Salon, barber &amp; spa</option><option value="Venues &amp; event services">Venues &amp; event services</option><option value="Trades, repairs &amp; cleaning">Trades, repairs &amp; cleaning</option><option value="Dentists &amp; dental clinics">Dentists &amp; dental clinics</option><option value="Other services">Other services</option></select><label for="offer-subcategory">Subcategory</label><select id="offer-subcategory"><option value="">All subcategories</option></select><label for="product-query">Product, service, business or specification</label><input id="product-query" type="search" placeholder="For example: cement 40 kg"><div id="product-results" aria-live="polite">Loading product offers…</div></section></main><script src="/shop-categories.js"></script><script src="/compare.js"></script>
 
 <footer>
