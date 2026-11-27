@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business pamphlet preview · Business Hub Fiji</title><meta name="robots" content="noindex">
+<meta name="description" content="A Fiji business on Business Hub Fiji, the online mall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f7fb; --surface:#ffffff; --ink:#10242b; --muted:#4d6268; --line:#dde4ee;
+  --lagoon:#10213c; --lagoon-ink:#ffffff; --accent:#e8c879; --accent-ink:#10213c;
+  --wa:#1fa855; --chip:#eef2f8;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0c1719;--surface:#132226;--ink:#e7f0ef;--muted:#9fb3b5;--line:#24393d;--lagoon:#1b3459;--lagoon-ink:#f2f6fb;--chip:#1a2c30;color-scheme:dark}
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body);padding-bottom:84px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+.top{background:var(--lagoon);color:var(--lagoon-ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;flex-wrap:wrap}
+.logo{display:flex;align-items:baseline;gap:7px;text-decoration:none;font-size:.95rem}
+.logo b{font:800 1.05rem var(--display)}
+.logo span{font:700 .64rem var(--body);letter-spacing:.18em;padding:1px 5px;border:1.5px solid currentColor;border-radius:4px}
+.top nav a{font-weight:600;font-size:.92rem;text-decoration:none;opacity:.9;margin-left:14px}
+.top nav a:hover{opacity:1;text-decoration:underline}
+
+.hero{position:relative;background:var(--lagoon);color:var(--lagoon-ink);overflow:hidden}
+.hero img.cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
+.hero .wrap{position:relative;padding:54px 18px 40px;display:grid;gap:12px}
+.hero.nophoto .wrap{padding-top:34px}
+.hero h1{font-size:clamp(2rem,7vw,3.4rem);font-weight:800;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.hero .offers{font-size:1.15rem;max-width:60ch;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{background:rgba(255,255,255,.16);backdrop-filter:blur(4px);font-weight:700;font-size:.85rem;padding:4px 11px;border-radius:999px}
+.tag.gold{background:var(--accent);color:var(--accent-ink)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:700 1rem var(--body);padding:12px 20px;border-radius:999px;text-decoration:none;border:1.5px solid var(--line);color:var(--ink);background:var(--surface);cursor:pointer}
+.btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn-light{background:#fff;border-color:#fff;color:#10213c}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.7);color:#fff}
+.btn-small{padding:8px 14px;font-size:.9rem}
+
+main{display:grid;gap:26px;padding:28px 0}
+.cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:12px}
+.card h2{font-size:1.35rem}
+.about{white-space:pre-line}
+dl{margin:0;display:grid;gap:12px}
+dt{font-weight:700;color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.06em}
+dd{margin:2px 0 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.gallery a{display:block;border-radius:14px;overflow:hidden;background:var(--chip);aspect-ratio:4/3}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.gallery a:hover img{transform:scale(1.04)}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.prod img,.prod .noimg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--chip)}
+.prod .noimg{display:grid;place-items:center;color:var(--muted);font:800 2rem var(--display)}
+.prod .body{padding:14px;display:grid;gap:6px;flex:1}
+.prod h3{font-size:1.08rem}
+.price{font:800 1.15rem var(--display)}
+.prod p.d{color:var(--muted);font-size:.95rem}
+.prod .btn{margin:0 14px 14px;align-self:flex-start}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec-h h2{font-size:1.6rem}
+.state{max-width:620px;margin:50px auto;text-align:center;display:grid;gap:14px;justify-items:center;padding:0 18px}
+.state h1{font-size:2rem}
+.skel{height:280px;background:linear-gradient(90deg,var(--lagoon),#1b3459,var(--lagoon));background-size:200% 100%;animation:sh 1.2s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}.gallery img{transition:none}}
+.made{background:var(--lagoon);color:var(--lagoon-ink);border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.made .btn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#10213c;box-shadow:0 -4px 16px rgba(0,0,0,.2)}
+.sticky a{flex:1;max-width:220px;text-align:center;padding:12px 8px;border-radius:999px;font:700 15px/1.2 var(--body);text-decoration:none}
+.sticky .s-wa{background:#1fa855;color:#fff}
+.sticky .s-call{background:#ffffff;color:#10213c}
+.sticky .s-mall{background:#e8c879;color:#10213c}
+footer{color:var(--muted);font-size:.9rem;padding:0 0 20px}
+@media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}.hero .wrap{padding-top:40px}}
+</style>
+<link rel="stylesheet" href="/site-background.css">
+<link rel="stylesheet" href="/shop-brochure.css"></head>
+<body><aside style="padding:15px;background:#fff2c8;color:#142c45;text-align:center">PAMPHLET PREVIEW · Fictional sample business and prices. Buttons demonstrate the workflow; no messages, bookings or payments are made.</aside><script>window.fetch=function(){return Promise.resolve({json:function(){return Promise.resolve({ok:true,shop:{name:'Your Business Fiji',slug:'demo-shop',category:'Furniture & homeware',town:'Lautoka',phone:'6790000000',about:'Your saved business description appears here. Add your own photos and actual products through your dashboard.',hours:'Add your actual opening hours',payments:'Confirm payment options with seller',photos:[]},products:[{id:'sample-1',name:'Example dining chair',price:'125',description:'Sample only. Add the actual materials, dimensions and finish.',category:'Dining room',available:true}]});}});};history.replaceState(null,'',location.pathname+'?s=demo-shop');document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&(a.href.includes('wa.me')||a.href.startsWith('tel:')||a.href.includes('booking.html'))){e.preventDefault();e.stopImmediatePropagation();alert('Preview only: customers send an enquiry for the business to confirm. Nothing was sent.');}},true);</script>
+<div class="top">
+  <div class="wrap">
+    <a class="logo" href="/"><b>Business Hub</b><span>FIJI</span></a>
+    <nav><a href="/">Mall</a><a href="/join">List your business</a></nav>
+  </div>
+</div>
+
+<div id="loading"><div class="skel" aria-hidden="true"></div><p class="state">Loading shop…</p></div>
+<div id="state" class="state" hidden></div>
+
+<div id="shop" hidden>
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="tags" id="tags"></div>
+      <h1 id="name"></h1>
+      <p class="offers" id="offers"></p>
+      <div class="acts" id="acts"></div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="cols">
+      <section class="card" id="about-card">
+        <h2>About us</h2>
+        <p class="about" id="about"></p>
+      </section>
+      <aside class="card">
+        <h2>Visit or contact</h2>
+        <dl id="facts"></dl>
+      </aside>
+    </div>
+
+    <section id="prod-sec" hidden>
+      <div class="sec-h"><h2>Products &amp; services</h2><span class="hint" id="prod-count"></span></div>
+      <div id="products" style="margin-top:14px"></div>
+    </section>
+
+    <section id="gal-sec" hidden>
+      <div class="sec-h"><h2>Photos</h2></div>
+      <div class="gallery" id="gallery" style="margin-top:14px"></div>
+    </section>
+
+    <div class="made">
+      <div>
+        <h3>Find more Fiji shops in the mall</h3>
+        <p>This shop is part of Business Hub Fiji. Own a business? Get your own shop website too.</p>
+      </div>
+      <div class="acts"><a class="btn" href="/join">Get my shop online</a><a class="btn btn-small" style="background:#fff;border-color:#fff;color:#10213c" href="/">Browse the mall</a></div>
+    </div>
+    <footer>Customers deal and pay the business directly. <button type="button" id="report" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">Report this shop</button></footer>
+  </main>
+
+  <nav class="sticky" id="sticky" aria-label="Contact this shop"></nav>
+</div>
+
+<script src="/shop-categories.js"></script><script src="/shop-brochure.js"></script>
+<script>
+(function(){
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbzk3yKpUjESUN2qbHkamU6uzlLfFQJ0idHSzpDfOpZAJwWk0LtDpK8Q2oUy6TaHrOjj/exec";
+  function $(id){ return document.getElementById(id); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function waNumber(phone){ var d = String(phone || "").replace(/\D/g, ""); if (d.length === 7) d = "679" + d; return d.length >= 10 ? d : ""; }
+  var PHOTO_OK = /^(https:\/\/lh3\.googleusercontent\.com\/d\/[\w-]{20,}|\/[\w\-\/]+\.(jpe?g|png|webp))$/;
+  var shopName = "";
+  function track(button){
+    try {
+      var body = JSON.stringify({ action: "click", business: shopName, button: button });
+      if (navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, new Blob([body], { type: "text/plain" }))) return;
+      fetch(ENDPOINT, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain" }, body: body });
+    } catch (e) {}
+  }
+  function link(text, href, cls, button){
+    var a = el("a", cls, text); a.href = href;
+    if (/^https:/.test(href)) { a.target = "_blank"; a.rel = "noopener"; }
+    if (button) a.addEventListener("click", function(){ track(button); });
+    return a;
+  }
+  function show(title, text, extra){
+    $("loading").hidden = true; $("shop").hidden = true;
+    var s = $("state"); s.hidden = false; s.textContent = "";
+    s.appendChild(el("h1", null, title)); s.appendChild(el("p", null, text));
+    var a = el("div", "acts"); a.appendChild(link("Browse the mall", "/", "btn"));
+    if (extra) a.appendChild(extra);
+    s.appendChild(a);
+  }
+
+  var slug = (location.pathname.match(/^\/shop\/([a-z0-9-]{1,80})\/?$/) || [])[1] || new URLSearchParams(location.search).get("s") || "";
+  if (!/^[a-z0-9-]{1,80}$/.test(slug)) { show("Shop not found", "Check the link, or find the shop in the mall."); return; }
+
+  fetch(ENDPOINT + "?action=shop&slug=" + encodeURIComponent(slug))
+    .then(function(r){ return r.json(); })
+    .then(render, function(){ show("Couldn't load this shop", "Check your connection and try again.", (function(){ var b = el("button", "btn", "Try again"); b.addEventListener("click", function(){ location.reload(); }); return b; })()); });
+
+  function render(res){
+    if (!res || !res.ok) { show("Shop not found", "This shop may have moved or isn't listed right now. Find more Fiji businesses in the mall."); return; }
+    var s = res.shop; shopName = s.name;
+    document.title = s.name + " · Business Hub Fiji";
+    if (res.paused) {
+      show(s.name, "This shop's website is taking a break. You can still find the business in the Business Hub Fiji mall.",
+        link("Find " + s.name + " in the mall", "/?q=" + encodeURIComponent(s.name), "btn btn-wa"));
+      return;
+    }
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute("content", s.name + (s.offers ? ": " + s.offers : "") + (s.town ? " · " + s.town : "") + " · on Business Hub Fiji");
+
+    var photos = (s.photos || []).filter(function(u){ return PHOTO_OK.test(u); });
+    var hero = $("hero");
+    if (photos.length) { var c = el("img", "cover"); c.src = photos[0]; c.alt = ""; hero.insertBefore(c, hero.firstChild); }
+    else hero.classList.add("nophoto");
+
+    var tags = $("tags");
+    if (s.tier === "premium") tags.appendChild(el("span", "tag gold", "★ Tabua Premium"));
+    else if (s.tier === "featured") tags.appendChild(el("span", "tag gold", "★ Featured"));
+    if (s.category) tags.appendChild(el("span", "tag", s.category));
+    if (s.town) tags.appendChild(el("span", "tag", s.town));
+    $("name").textContent = s.name;
+    $("offers").textContent = s.offers || "";
+
+    var wa = waNumber(s.phone), acts = $("acts"), sticky = $("sticky");
+    var hello = "Bula " + s.name + ", I found your shop on Business Hub Fiji.";
+    if (wa) {
+      acts.appendChild(link("WhatsApp us", "https://wa.me/" + wa + "?text=" + encodeURIComponent(hello), "btn btn-wa", "Shop page WhatsApp"));
+      acts.appendChild(link("Call", "tel:+" + wa, "btn btn-light", "Shop page Call"));
+      sticky.appendChild(link("WhatsApp", "https://wa.me/" + wa + "?text=" + encodeURIComponent(hello), "s-wa", "Shop page WhatsApp"));
+      sticky.appendChild(link("Call", "tel:+" + wa, "s-call", "Shop page Call"));
+    }
+    var booking = ShopCategories.booking(s.category);
+    if (wa && booking) acts.appendChild(link(booking.label, "/booking.html?shop="+encodeURIComponent(s.slug), "btn btn-wa"));
+    if (s.maps) acts.appendChild(link("Directions", s.maps, "btn btn-ghost", "Shop page Map"));
+    sticky.appendChild(link("Mall", "/", "s-mall"));
+
+    if (s.about) $("about").textContent = s.about;
+    else $("about").textContent = (s.offers ? s.offers + ". " : "") + "Message us on WhatsApp to ask about prices and availability.";
+
+    var facts = $("facts");
+    function fact(k, v){ if (!v) return; var d = el("div"); d.appendChild(el("dt", null, k)); var dd = el("dd"); if (typeof v === "string") dd.textContent = v; else dd.appendChild(v); d.appendChild(dd); facts.appendChild(d); }
+    fact("Opening hours", s.hours);
+    fact("Location", s.town);
+    if (s.maps) fact("Map", link("Open in Google Maps", s.maps, "", "Shop page Map"));
+    fact("Payments", s.payments);
+    if (wa) fact("Phone / WhatsApp", link("+" + wa.replace(/^679/, "679 "), "tel:+" + wa, "", "Shop page Call"));
+
+    var prods = res.products || [];
+    if (prods.length) {
+      $("prod-sec").hidden = false;
+      $("prod-count").textContent = prods.length + (prods.length === 1 ? " item" : " items");
+      var g = $("products");
+      ShopCategories.group(prods, s.category).forEach(function(group) {
+        var section = el("section"), heading = el("h3", null, group.name);
+        section.appendChild(heading);
+        var grid = el("div", "products"); section.appendChild(grid); g.appendChild(section);
+        group.products.forEach(function(p){
+        var card = el("article", "prod");
+        if (p.photo && PHOTO_OK.test(p.photo)) { var im = el("img"); im.src = p.photo; im.alt = p.name; im.loading = "lazy"; card.appendChild(im); }
+        else card.appendChild(el("div", "noimg", (p.name || "?").charAt(0).toUpperCase()));
+        var b = el("div", "body");
+        b.appendChild(el("h3", null, p.name));
+        b.appendChild(el("p", "price", p.price === "" || p.price == null ? "Ask for price" : "FJD $" + Number(p.price).toFixed(2)));
+        if (p.description) b.appendChild(el("p", "d", p.description));
+        card.appendChild(b);
+        if (wa) card.appendChild(link("Ask on WhatsApp", "https://wa.me/" + wa + "?text=" + encodeURIComponent("Bula " + s.name + ", I saw \"" + p.name + "\" on your Business Hub Fiji shop. Is it available?"), "btn btn-wa btn-small", "Shop page product"));
+        var productBooking = ShopCategories.booking(p.main_category || s.category);
+        if (wa && productBooking) card.appendChild(link(productBooking.label,"/booking.html?shop="+encodeURIComponent(s.slug)+"&product="+encodeURIComponent(p.id),"btn btn-wa btn-small"));
+        grid.appendChild(card);
+        });
+      });
+    }
+
+    if (photos.length) {
+      $("gal-sec").hidden = false;
+      var gal = $("gallery");
+      photos.forEach(function(u, i){
+        var a = el("a"); a.href = u; a.target = "_blank"; a.rel = "noopener";
+        var im = el("img"); im.src = u; im.alt = s.name + " photo " + (i + 1); im.loading = "lazy";
+        a.appendChild(im); gal.appendChild(a);
+      });
+    }
+
+    $("report").addEventListener("click", function(){ location.href = "/?report=" + encodeURIComponent(s.name); });
+    $("loading").hidden = true; $("shop").hidden = false; BHFBrochure.install(s);
+  }
+})();
+</script>
+</body>
+</html>
+

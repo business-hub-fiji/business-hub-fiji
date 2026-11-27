@@ -160,7 +160,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
 footer a{color:inherit !important}
 </style>
 <link rel="stylesheet" href="/site-background.css">
-</head>
+<script src="/registration-flow.js"></script></head>
 <body>
 
 <header>
@@ -596,7 +596,7 @@ footer a{color:inherit !important}
     if (posted) {
       $("done-title").textContent = "Registration saved";
       $("done-msg").textContent = data.joining_as === "Business"
-        ? "Your business is awaiting review and is not public yet. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery. Use the dashboard button below to request a login code at your business email."
+        ? "Your business is awaiting review and is not public yet. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery. Opening your dashboard. Request a login code at your business email to manage the shop."
         : "Your registration is saved. Explore the mall below to discover shops, browse products and compare prices. Keep your reference below. Email notifications are queued separately; saving does not confirm email delivery.";
       $("send-row").hidden = true; $("mail-note").hidden = true;
     } else {
@@ -605,6 +605,7 @@ footer a{color:inherit !important}
     }
     form.hidden = true; done.hidden = false;
     done.scrollIntoView({block:"start"});
+    if (posted) BHFRegistrationFlow.continueRegistration(data, true);
   }
 
   form.addEventListener("submit", function(e){
@@ -668,6 +669,6 @@ footer a{color:inherit !important}
   <a class="q-reg" href="#register">Register</a>
   <a class="q-wa" href="https://wa.me/6799211153?text=Bula%20Business%20Hub%20Fiji%21%20I%27d%20like%20to%20join%20the%20mall." target="_blank" rel="noopener">WhatsApp us</a>
 </nav>
-</body>
+<script src="/website-templates.js"></script><script src="/registration-template.js"></script></body>
 </html>
 
