@@ -161,9 +161,14 @@ header{background:linear-gradient(90deg,rgba(9,24,42,.76),rgba(9,24,42,.32)),url
 @media(max-width:760px){.layout{grid-template-columns:1fr}.intro{padding:36px 0 48px}.grid{grid-template-columns:1fr;max-height:74vh}.card{min-height:220px}.topnav{flex-wrap:wrap}.tools{top:0}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important}}
 </style><link rel="stylesheet" href="/site-background.css">
+<link rel="stylesheet" href="/dashboard-background.css">
+<script defer src="/dashboard-background.js"></script>
 </head>
 <body>
-<header>
+<header class="dashboard-sunrise">
+  <img class="sunrise-layer sunrise-still" src="/dashboard-sunrise/sunrise-1.jpg" alt="" aria-hidden="true">
+  <img class="sunrise-layer sunrise-next" alt="" aria-hidden="true">
+  <button type="button" class="sunrise-control" hidden>Pause photos</button>
   <div class="wrap">
     <div class="bar">
       <a class="logo" href="/" aria-label="Business Hub Fiji home"><i class="bure" aria-hidden="true"></i><b>Business Hub</b><span>FIJI</span></a>
