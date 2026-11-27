@@ -2,8 +2,18 @@
 export const metadata = {
   title: "Business Hub Fiji",
   description:
-    "Connecting People. Empowering Businesses. Building the Digital Economy."
+    "Connecting People. Empowering Businesses. Building the Digital Economy.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" }
+    ],
+    apple: "/apple-touch-icon.png"
+  },
+  manifest: "/site.webmanifest"
 };
+
+export const viewport = { themeColor: "#10213c" };
 
 // Quick-access bar fixed to the bottom of every page.
 const WHATSAPP_LINK =
