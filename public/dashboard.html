@@ -330,7 +330,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
       $("title").textContent = shop.name;
       $("subtitle").textContent = "Shop reference " + shop.ref + ". Update your shop, add photos and list your products.";
       $("dash").hidden = false; $("logout").hidden = false;
-      renderStatus(); fillDetails(); renderPhotos(); renderProducts();
+      renderStatus(); fillDetails(); renderPhotos(); renderProducts(); document.dispatchEvent(new Event("bhf-shop-loaded"));
     });
   }
 
@@ -531,5 +531,5 @@ input:focus,select:focus,textarea:focus{border-color:var(--lagoon);outline:none}
   if (token) openDash();
 })();
 </script>
-</body>
+<script src="/website-templates.js"></script><script src="/website-template-dashboard.js"></script></body>
 </html>
